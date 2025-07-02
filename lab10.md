@@ -1,5 +1,5 @@
 # Lab 10: Performance Optimization Techniques
-## e. Version Control for Sentinel Policies
+## Version Control for Sentinel Policies
 
 ---
 

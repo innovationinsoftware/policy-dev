@@ -1,5 +1,5 @@
 # Lab 9: Working with External Data in Sentinel
-## c. Mocking for Policy Testing
+## Mocking for Policy Testing
 
 ---
 

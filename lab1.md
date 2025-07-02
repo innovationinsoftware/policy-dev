@@ -1,106 +1,121 @@
-### HashiCorp Sentinel Fundamentals Lab
+# HashiCorp Sentinel Fundamentals Lab
 
-#### Part 1: Verify Sentinel CLI
-
-1. **Check Sentinel is installed:**
-   - Run:
-     ```bash
-     sentinel version
-     ```
-   - _What version do you see?_
-
-2. **Explore CLI help:**
-   - Run:
-     ```bash
-     sentinel --help
-     ```
-   - _List two subcommands you see in the output._
-
-3. **List available commands:**
-   - Run:
-     ```bash
-     sentinel list
-     ```
-   - _What is the output?_
+## Overview
+In this lab, you'll get hands-on experience with the HashiCorp Sentinel CLI and its language fundamentals. You'll learn how to verify your installation, explore the CLI, and understand the basics of Sentinel's syntax, rules, functions, and imports. This foundation will prepare you for writing and testing policies in real-world scenarios.
 
 ---
 
-#### Part 2: Sentinel Language Basics
+## Part 1: Getting Started with the Sentinel CLI
 
-a. **Syntax and Structure**
+Before you can use Sentinel to enforce policies, you need to make sure the CLI is installed and accessible. This section will help you confirm your setup and introduce you to the available commands.
 
-4. **Create a minimal policy file:**
-   - Create a file named `hello.sentinel` with this content:
-     ```hcl
-     main = rule { true }
-     ```
-   - Run:
-     ```bash
-     sentinel apply hello.sentinel
-     ```
-   - _What is the result?_
+### 1. Verify Sentinel Installation
+Let's start by checking that Sentinel is installed and ready to use. Open your terminal and run:
+```bash
+sentinel version
+```
+You should see the version number printed. This confirms that the CLI is available on your system.
 
-b. **Rules and Functions**
+### 2. Explore the CLI Help
+Sentinel provides a helpful built-in guide to its commands. To see what you can do with the CLI, run:
+```bash
+sentinel --help
+```
+Take a moment to look through the output. Notice the available subcommands and options. This is your reference for exploring Sentinel's capabilities.
 
-5. **Experiment with rules:**
-   - Change `main = rule { true }` to `main = rule { false }` in `hello.sentinel`.
-   - Run the apply command again.
-   - _What changed in the output?_
-
-6. **Try a function:**
-   - Edit `hello.sentinel` to:
-     ```hcl
-     double = func(x) { x * 2 }
-     main = rule { double(2) is 4 }
-     ```
-   - Run:
-     ```bash
-     sentinel apply hello.sentinel
-     ```
-   - _Does the policy pass?_
+### 3. List Available Imports and Functions
+Sentinel comes with a set of built-in imports and functions. To see what's available, run:
+```bash
+sentinel list
+```
+This will display a list of imports and functions you can use in your policies.
 
 ---
 
-c. **Imports and Modules**
+## Part 2: Exploring Sentinel Language Basics
 
-7. **Use a built-in import:**
-   - Create a file `import-test.sentinel`:
-     ```hcl
-     import "strings"
-     main = rule { strings.has_prefix("sentinel", "sen") }
-     ```
-   - Run:
-     ```bash
-     sentinel apply import-test.sentinel
-     ```
-   - _What is the result?_
+Now that you've seen the CLI, let's dive into the language itself. Sentinel policies are written in a simple, logic-based language. In this section, you'll create and run your first policies to see how Sentinel evaluates them.
+
+### 4. Create and Run a Minimal Policy
+A Sentinel policy is just a file with a `.sentinel` extension. Let's create the simplest possible policy:
+1. Create a file named `hello.sentinel` with this content:
+   ```hcl
+   main = rule { true }
+   ```
+2. Run the policy:
+   ```bash
+   sentinel apply hello.sentinel
+   ```
+You should see `PASS` as the result. This means the policy's main rule evaluated to true.
+
+### 5. Experiment with Rules
+Rules are the core of Sentinel policies. Let's see what happens when a rule fails:
+1. Edit `hello.sentinel` and change `main = rule { true }` to `main = rule { false }`.
+2. Run the policy again:
+   ```bash
+   sentinel apply hello.sentinel
+   ```
+You should now see `FAIL`. This demonstrates how rules control policy outcomes.
+
+### 6. Try a Function
+Sentinel supports functions for reusable logic. Let's add a simple function to your policy:
+1. Edit `hello.sentinel` to:
+   ```hcl
+   double = func(x) { x * 2 }
+   main = rule { double(2) is 4 }
+   ```
+2. Run:
+   ```bash
+   sentinel apply hello.sentinel
+   ```
+You should see `PASS`. This shows how you can define and use functions in your policies.
 
 ---
 
-#### Part 3: CLI Options Practice
+## Part 3: Using Imports for More Power
 
-8. **Try the trace flag:**
-   - Run:
-     ```bash
-     sentinel apply import-test.sentinel -trace
-     ```
-   - _What extra information do you see?_
+Sentinel includes built-in imports (libraries) for common operations, such as string manipulation. Let's try one out.
 
-9. **Explore more help:**
-   - Run:
-     ```bash
-     sentinel apply --help
-     ```
-   - _Name one option you find useful._
+### 7. Use a Built-in Import
+1. Create a new file called `import-test.sentinel` with this content:
+   ```hcl
+   import "strings"
+   main = rule { strings.has_prefix("sentinel", "sen") }
+   ```
+2. Run:
+   ```bash
+   sentinel apply import-test.sentinel
+   ```
+You should see `PASS`. This means the import worked and the rule evaluated as expected.
 
 ---
 
-### Lab Completion
+## Part 4: Practicing CLI Options
 
-You have:
-- Verified Sentinel CLI installation
-- Explored CLI commands and help
-- Practiced Sentinel syntax, rules, functions, and imports interactively
-- Used CLI options for more insight
+The Sentinel CLI offers options for debugging and exploring policy behavior. Let's try some of them.
 
-_You are now ready for more advanced Sentinel labs!_
+### 8. Run with Trace Output
+The `-trace` flag shows detailed evaluation steps, which is useful for debugging policies. Try it out:
+```bash
+sentinel apply import-test.sentinel -trace
+```
+Look at the extra information printed. This can help you understand how Sentinel evaluates your policy.
+
+### 9. Explore More Help
+You can always get more information about any command or option. For example, to see all options for `apply`, run:
+```bash
+sentinel apply --help
+```
+Review the output and note any options you find useful for your workflow.
+
+---
+
+## Lab Completion
+
+In this lab, you:
+- Verified your Sentinel CLI installation
+- Explored the CLI and its commands
+- Practiced writing and running basic Sentinel policies
+- Used imports and CLI options for more advanced behavior
+
+You now have a solid foundation for working with Sentinel. You're ready to move on to more advanced policy development and integration with HashiCorp tools!

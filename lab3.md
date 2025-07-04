@@ -9,82 +9,78 @@ In this lab, you'll explore the heart of Sentinel policies: rules and functions.
 
 Rules are the primary building blocks of Sentinel policies. Each rule evaluates to either true or false, and the `main` rule determines the policy's outcome.
 
-### 1. Define Multiple Rules
-Let's see how you can define and use more than one rule in a policy.
+### 1. Define Multiple Rules (Practical Example)
+Let's see how you can define and use more than one rule in a policy, using a more practical scenario.
 
 1. Create a file named `rules.sentinel`:
    ```hcl
-   allow = rule { 2 + 2 == 4 }
-   deny = rule { false }
-   main = rule { allow and not deny }
+   is_admin = rule { "admin" in ["admin", "user", "guest"] }
+   has_access = rule { is_admin or (5 < 10) }
+   main = rule { has_access }
    ```
 2. Run:
    ```bash
    sentinel apply rules.sentinel
    ```
-You should see `PASS`. The `main` rule combines the results of `allow` and `deny`.
+You should see `PASS`. The `main` rule allows access if the user is an admin or another condition is met.
 
 **Now try the following to see how changing rules affects the policy outcome:**
-- Edit `rules.sentinel` and change `allow` to `allow = rule { false }`:
+- Edit `rules.sentinel` and change `is_admin` to check for a different role:
   ```hcl
-  allow = rule { false }
-  deny = rule { false }
-  main = rule { allow and not deny }
+  is_admin = rule { "user" in ["admin"] }
   ```
-  Run:
-  ```bash
-  sentinel apply rules.sentinel
-  ```
-  You should see `FAIL`. This shows that if `allow` is false, the policy fails.
-- Add a third rule to `rules.sentinel`:
+  Run the policy and observe the result (`PASS` or `FAIL`).
+- Add a third rule, e.g., `quota_ok = rule { 100 < 200 }`, and use it in `main`:
   ```hcl
-  maybe = rule { 1 == 2 }
+  quota_ok = rule { 100 < 200 }
+  main = rule { has_access and quota_ok }
   ```
-  Then update `main` to use it:
-  ```hcl
-  main = rule { allow and not deny and not maybe }
-  ```
-  Run the policy and observe the result. This demonstrates how you can combine multiple rules for more complex logic.
+  Run the policy and see how the outcome changes.
 
 **Explanation:**
-Changing the values of rules or adding new rules lets you control under what conditions your policy passes or fails. This is useful for expressing more complex requirements.
+This shows how you can model real access control or resource checks with multiple rules.
 
 ---
 
-### 2. Rule Dependencies and Evaluation
-Rules can depend on each other. Let's explore how Sentinel evaluates them.
+### 2. Rule Dependencies and Evaluation (Policy Scenario)
+Let’s make rules depend on each other in a more policy-like way.
 
 1. Edit `rules.sentinel` to:
    ```hcl
-   allow = rule { 5 > 3 }
-   deny = rule { !allow }
-   main = rule { allow and not deny }
+   is_weekend = rule { false }
+   is_holiday = rule { true }
+   can_deploy = rule { !is_weekend and !is_holiday }
+   main = rule { can_deploy }
    ```
 2. Run the policy and observe the result.
 
 **Now try the following to see how rule dependencies work:**
-- Add another rule to `rules.sentinel`:
+- Add a rule for `maintenance_mode`:
   ```hcl
-  maybe = rule { 2 < 3 }
+  maintenance_mode = rule { false }
   ```
-  Then update `allow` to depend on `maybe`:
+  Update `can_deploy` to:
   ```hcl
-  allow = rule { maybe }
+  can_deploy = rule { !is_weekend and !is_holiday and !maintenance_mode }
   ```
-  Run the policy and observe the result. This shows how rules can reference each other to build up logic.
+  Run the policy and see how toggling these rules affects the outcome.
 
 **Challenge:**
-To practice combining rules, write a policy in `rules.sentinel` where `main` passes only if two out of three rules are true. For example:
+Write a policy where `main` passes only if at least two out of three conditions (`is_weekend`, `is_holiday`, `maintenance_mode`) are false. For example:
 ```hcl
-one = rule { true }
-two = rule { false }
-three = rule { true }
-main = rule { (one and two) or (one and three) or (two and three) }
+is_weekend = rule { false }
+is_holiday = rule { true }
+maintenance_mode = rule { false }
+main = rule {
+  (!is_weekend and !is_holiday) or
+  (!is_weekend and !maintenance_mode) or
+  (!is_holiday and !maintenance_mode)
+}
 ```
-Run the policy and confirm it passes. Then, try changing the values of the rules and see how it affects the result.
+Run the policy and confirm it passes. Try changing the values of the rules and see how it affects the result.
 
 **Explanation:**
-By making rules depend on each other, you can express more nuanced policy requirements, such as requiring a certain number of conditions to be true.
+This models a deployment policy that depends on multiple environment factors.
 
 ---
 

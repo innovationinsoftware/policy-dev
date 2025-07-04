@@ -150,14 +150,7 @@ We'll create a test case that is intentionally incorrect (the expected value doe
        main = false
      }
    }
-   ```
-2. Run the tests:
-   ```bash
-   sentinel test
-   ```
-   You should see output like:
-   ```
-   FAIL - time-policy.sentinel
+   ```sentinel
      FAIL - test/time-policy/should-fail-9am.hcl
        expected "main" to be false, got: true
    ...

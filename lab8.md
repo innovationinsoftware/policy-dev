@@ -21,7 +21,7 @@ All commands and files in this lab should be created and run inside the `lab8` d
 
 Sentinel supports `if`, `else if`, and `else` statements in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/conditionals)).
 
-### 1. Using `if` to Set a Variable (from the docs)
+### 1. Using `if` to Set a Variable
 
 This example demonstrates how to use an `if` statement in the global scope to set a variable, and then use that variable in a rule.
 
@@ -48,7 +48,7 @@ This example demonstrates how to use an `if` statement in the global scope to se
 
 ---
 
-### 2. Using `case` Statements (from the docs)
+### 2. Using `case` Statements
 
 This example demonstrates how to use a `case` statement in the global scope to set a variable, and then use that variable in a rule.
 
@@ -76,70 +76,85 @@ This example demonstrates how to use a `case` statement in the global scope to s
 
 ---
 
-## Part 2: Loops and Iteration
+## Part 2: Loops and Iteration (Based on Official Documentation)
 
-Sentinel supports iteration over lists and maps using the `foreach` and `filter` constructs. This is useful for evaluating policies against collections of resources or attributes.
+Sentinel supports `for` loops in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/loops)).
 
-### 2. Enforcing a Rule Across Multiple Resources
+### 1. Summing a List
 
-Suppose you want to ensure all VMs in a list have a tag `"owner"`.
+This example demonstrates how to use a `for` loop to sum the values in a list.
 
-1. Create a data file named `vms.json`:
-   ```json
-   [
-     { "name": "vm1", "tags": ["owner", "prod"] },
-     { "name": "vm2", "tags": ["owner"] },
-     { "name": "vm3", "tags": ["dev"] }
-   ]
-   ```
-2. Create a policy file named `tags-iteration.sentinel`:
-   ```hcl
-   import "static" "vms"
-   main = rule {
-     all_owners = [
-       foreach vm in vms :
-         "owner" in vm.tags
-     ]
-     all(all_owners)
+1. Create a policy file named `sum-list.sentinel`:
+   ```sentinel
+   numbers = [1, 2, 3]
+   sum = 0
+   for numbers as num {
+     sum += num
    }
+
+   main = rule { sum == 6 }
    ```
-3. Edit `sentinel.hcl` to:
-   ```hcl
-   import "static" "vms" {
-     source = "./vms.json"
-     format = "json"
-   }
-   ```
-4. Run:
+2. Run:
    ```bash
-   sentinel apply tags-iteration.sentinel
+   sentinel apply sum-list.sentinel
    ```
-   You should see `FAIL` because `vm3` is missing the `owner` tag.
+   You should see `PASS` because the sum of [1, 2, 3] is 6. Try changing the list or the rule to experiment.
 
-**Try this:**
-- Add the `owner` tag to `vm3` in `vms.json` and rerun. The policy should pass.
-- Print the names of VMs missing the `owner` tag.
-
-**Challenge:**
-Write a policy that ensures all VMs have both an `owner` and an `environment` tag.
+**Explanation:**
+- The `for` loop iterates over each number in the list and adds it to `sum`.
+- The rule checks if the sum is as expected.
 
 ---
 
-### 3. Filtering and Counting
+### 2. Collecting Keys from a Map
 
-You can use `filter` to select items from a list that meet a condition, and `length` to count them.
+This example demonstrates how to use a `for` loop to collect the keys from a map.
 
-1. Edit `tags-iteration.sentinel` to:
-   ```hcl
-   import "static" "vms"
-   missing_owners = filter vm in vms : !("owner" in vm.tags)
-   main = rule { length(missing_owners) == 0 }
+1. Create a policy file named `map-keys.sentinel`:
+   ```sentinel
+   mymap = { "a": 1, "b": 2 }
+   keys = []
+   for mymap as k {
+     append(keys, k)
+   }
+
+   main = rule { length(keys) == 2 && keys[0] == "a" && keys[1] == "b" }
    ```
-2. Run the policy. Try removing the `owner` tag from one or more VMs in `vms.json` and observe the result.
+2. Run:
+   ```bash
+   sentinel apply map-keys.sentinel
+   ```
+   You should see `PASS` if the keys are collected as expected. Try changing the map or the rule to experiment.
 
-**Try this:**
-- Print the number of VMs missing the `owner` tag.
-- Use a function to encapsulate the check for required tags.
+**Explanation:**
+- The `for` loop iterates over the map and appends each key to the `keys` list.
+- The rule checks the length and order of the keys.
+
+---
+
+### 3. Summing Values from a Map
+
+This example demonstrates how to use a `for` loop to sum the values in a map.
+
+1. Create a policy file named `sum-map.sentinel`:
+   ```sentinel
+   mymap = { "a": 1, "b": 2 }
+   total = 0
+   for mymap as k, v {
+     total += v
+   }
+
+   main = rule { total == 3 }
+   ```
+2. Run:
+   ```bash
+   sentinel apply sum-map.sentinel
+   ```
+   You should see `PASS` because the sum of the values is 3. Try changing the map or the rule to experiment.
+
+**Explanation:**
+- The `for` loop iterates over the map, adding each value to `total`.
+- The rule checks if the total is as expected.
 
 ---
 

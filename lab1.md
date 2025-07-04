@@ -95,33 +95,41 @@ You should see `PASS`. This means the import worked and the rule evaluated as ex
 
 ---
 
-## Part 4: Practicing CLI Options
+### 9. Formatting Policies with `sentinel fmt`
 
-The Sentinel CLI offers options for debugging and exploring policy behavior. Let's try some of them.
+The Sentinel CLI provides a `fmt` command to automatically format your policy files to a canonical style. This helps keep your code clean and consistent.
 
-### 8. Using CLI Options: Passing Parameters
-
-The Sentinel CLI allows you to pass parameters to your policy using the `-param` flag. This is useful for testing how your policy behaves with different inputs.
-
-1. In your `lab1` directory, create a file called `param-example.sentinel` with this content:
+1. In your `lab1` directory, create or edit a file called `messy.sentinel` with poorly formatted content, for example:
    ```hcl
-   main = rule { input == "test" }
+   main=rule{true}
    ```
-2. Run the policy with a parameter:
+
+2. Format the file in place:
    ```bash
-   sentinel apply param-example.sentinel -param 'input=test'
+   sentinel fmt messy.sentinel
    ```
-   You should see `PASS`.
+   The file will be rewritten in a clean, canonical format. Open `messy.sentinel` to see the result:
+   ```hcl
+   main = rule { true }
+   ```
 
-3. Try changing the parameter value:
+3. To check if a file needs formatting (without changing it):
    ```bash
-   sentinel apply param-example.sentinel -param 'input=fail'
+   sentinel fmt -check=true messy.sentinel
    ```
-   You should see `FAIL`.
+   If the file is already formatted, there will be no output and the exit code will be 0. If not, the filename will be printed and the exit code will be non-zero.
 
-This demonstrates how you can use CLI options to make your policies dynamic and test different scenarios.
+4. To see the formatted output without modifying the file:
+   ```bash
+   sentinel fmt -write=false messy.sentinel
+   ```
+   The formatted policy will be printed to your terminal, but the file will not be changed.
 
-### 9. Explore More Help
+Using `sentinel fmt` helps ensure your policies are easy to read and maintain.
+
+---
+
+### 10. Explore More Help
 You can always get more information about any command or option. For example, to see all options for `apply`, run:
 ```bash
 sentinel apply --help
@@ -136,6 +144,7 @@ In this lab, you:
 - Verified your Sentinel CLI installation
 - Explored the CLI and its commands
 - Practiced writing and running basic Sentinel policies
-- Used imports and CLI options for more advanced behavior
+- Used imports for more advanced behavior
+- Used the formatter to keep your policies clean
 
 You now have a solid foundation for working with Sentinel. You're ready to move on to more advanced policy development and integration with HashiCorp tools!

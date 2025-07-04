@@ -1,7 +1,7 @@
 # HashiCorp Sentinel Lab 4: Imports and Modules
 
 ## Overview
-In this lab, you'll learn how to extend Sentinel's capabilities using imports and modules. Imports let you use built-in libraries for common operations, while modules help you organize and reuse policy code. You'll practice using both in hands-on exercises and explore best practices for modular policy design.
+In this lab, you'll learn how to extend Sentinel's capabilities using imports and modules. Imports let you use built-in libraries for common operations, while modules help you organize and reuse policy code. You'll practice using both in hands-on exercises.
 
 ---
 
@@ -79,7 +79,7 @@ By setting both `is_weekday` and `is_open_hours` to `true`, the `main` rule will
 
 ## Part 2: Understanding and Using Modules
 
-Modules let you organize and reuse code across multiple policies. While advanced usage is rare in simple policies, it's important to know the basics and best practices.
+Modules let you organize and reuse code across multiple policies. While advanced usage is rare in simple policies, it's important to know the basics.
 
 ### 3. Using Modules Locally with the Sentinel CLI (Runnable Example)
 
@@ -121,24 +121,6 @@ You can use modules locally with the open-source Sentinel CLI by configuring the
 - In your policy, you import the module with `import "foo"` and call its function with `foo.hello()`.
 - The `main = true` rule ensures the policy always passes.
 
-**Note:**
-This is the supported way to use modules locally with the open-source Sentinel CLI. For more details, see the [official documentation](https://developer.hashicorp.com/sentinel/docs/extending/modules).
-
----
-
-## Part 3: Advanced Import and Module Patterns
-
-### 5. Nested Imports and Error Handling
-1. Create a module that imports another module (if supported in your Sentinel version).
-2. Try to import a non-existent module and observe the error.
-
-**Now try the following:**
-- Experiment with import paths (relative, absolute).
-- Try importing a module with a syntax error and see what happens.
-
-**Explanation:**
-These steps help you understand how Sentinel handles import errors and how to structure your modules for maintainability.
-
 ---
 
 ## Lab Completion
@@ -147,7 +129,5 @@ In this lab, you:
 - Used built-in imports for common operations
 - Explored other available imports
 - Created and used simple modules
-- Practiced best practices for modular policy design
-- Explored advanced import and module patterns
 
 You now have a working knowledge of Sentinel's imports and modules. You're ready for more advanced policy development and integration! 

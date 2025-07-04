@@ -209,7 +209,7 @@ You can use functions inside rules and combine multiple rules for more complex l
 ### 5. Build a Composite Policy
 1. Create a file named `composite.sentinel`:
    ```hcl
-   is_even = func(x) { x % 2 == 0 }
+   is_even = func(x) { return x % 2 == 0 }
    allow = rule { is_even(4) }
    main = rule { allow }
    ```
@@ -222,20 +222,21 @@ You can use functions inside rules and combine multiple rules for more complex l
 **Now try the following to see how combining functions and rules works:**
 - Edit `composite.sentinel` and change the argument to `is_even(5)`:
   ```hcl
+  is_even = func(x) { return x % 2 == 0 }
   allow = rule { is_even(5) }
   main = rule { allow }
   ```
   Run the policy and observe the result (`FAIL`).
 - Combine multiple functions in a rule:
   ```hcl
-  double = func(x) { x * 2 }
-  triple = func(x) { x * 3 }
+  double = func(x) { return x * 2 }
+  triple = func(x) { return x * 3 }
   main = rule { double(2) == 4 and triple(2) == 6 }
   ```
   Run the policy and confirm it passes.
 - Use a function to determine the outcome of more than one rule:
   ```hcl
-  is_even = func(x) { x % 2 == 0 }
+  is_even = func(x) { return x % 2 == 0 }
   allow = rule { is_even(2) }
   deny = rule { !is_even(3) }
   main = rule { allow and deny }
@@ -245,7 +246,7 @@ You can use functions inside rules and combine multiple rules for more complex l
 **Challenge:**
 Write a policy in `composite.sentinel` where `main` passes only if a function returns true for at least two different inputs. For example:
 ```hcl
-is_even = func(x) { x % 2 == 0 }
+is_even = func(x) { return x % 2 == 0 }
 main = rule { is_even(2) and is_even(4) }
 ```
 Run the policy and confirm it passes. Try changing one of the arguments to an odd number and see how it affects the result.
@@ -260,7 +261,7 @@ Combining rules and functions lets you express complex requirements in a clear a
 ### 6. Nested Functions and Rule Logic
 1. Edit `composite.sentinel` to:
    ```hcl
-   add = func(a, b) { a + b }
+   add = func(a, b) { return a + b }
    is_sum_even = func(a, b) { add(a, b) % 2 == 0 }
    main = rule { is_sum_even(2, 4) }
    ```
@@ -269,8 +270,8 @@ Combining rules and functions lets you express complex requirements in a clear a
 **Now try the following to practice nesting functions:**
 - Edit `composite.sentinel` and nest more functions or use more complex logic, for example:
   ```hcl
-  add = func(a, b) { a + b }
-  multiply = func(a, b) { a * b }
+  add = func(a, b) { return a + b }
+  multiply = func(a, b) { return a * b }
   main = rule { multiply(add(2, 3), 2) == 10 }
   ```
   Run the policy and confirm it passes.
@@ -281,7 +282,7 @@ Nesting functions allows you to build up more advanced logic and reuse smaller p
 ### 7. Error Handling in Functions
 1. Create a file `error-func.sentinel`:
    ```hcl
-   divide = func(a, b) { a / b }
+   divide = func(a, b) { return a / b }
    main = rule { divide(4, 0) == 0 }
    ```
 2. Run:

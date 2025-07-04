@@ -24,12 +24,30 @@ Let's see how you can define and use more than one rule in a policy.
    ```
 You should see `PASS`. The `main` rule combines the results of `allow` and `deny`.
 
-**Try this:**
-- Change `allow` to `allow = rule { false }` and rerun. What happens?
-- Add a third rule, e.g., `maybe = rule { 1 == 2 }`, and use it in `main`.
+**Now try the following to see how changing rules affects the policy outcome:**
+- Edit `rules.sentinel` and change `allow` to `allow = rule { false }`:
+  ```hcl
+  allow = rule { false }
+  deny = rule { false }
+  main = rule { allow and not deny }
+  ```
+  Run:
+  ```bash
+  sentinel apply rules.sentinel
+  ```
+  You should see `FAIL`. This shows that if `allow` is false, the policy fails.
+- Add a third rule to `rules.sentinel`:
+  ```hcl
+  maybe = rule { 1 == 2 }
+  ```
+  Then update `main` to use it:
+  ```hcl
+  main = rule { allow and not deny and not maybe }
+  ```
+  Run the policy and observe the result. This demonstrates how you can combine multiple rules for more complex logic.
 
-**Reflection:**
-How does combining rules help you express more complex policy logic?
+**Explanation:**
+Changing the values of rules or adding new rules lets you control under what conditions your policy passes or fails. This is useful for expressing more complex requirements.
 
 ---
 
@@ -44,11 +62,29 @@ Rules can depend on each other. Let's explore how Sentinel evaluates them.
    ```
 2. Run the policy and observe the result.
 
-**Try this:**
-- Make `allow` depend on another rule, e.g., `maybe = rule { 2 < 3 }` and use `allow = rule { maybe }`.
+**Now try the following to see how rule dependencies work:**
+- Add another rule to `rules.sentinel`:
+  ```hcl
+  maybe = rule { 2 < 3 }
+  ```
+  Then update `allow` to depend on `maybe`:
+  ```hcl
+  allow = rule { maybe }
+  ```
+  Run the policy and observe the result. This shows how rules can reference each other to build up logic.
 
 **Challenge:**
-Write a policy where `main` passes only if two out of three rules are true.
+To practice combining rules, write a policy in `rules.sentinel` where `main` passes only if two out of three rules are true. For example:
+```hcl
+one = rule { true }
+two = rule { false }
+three = rule { true }
+main = rule { (one and two) or (one and three) or (two and three) }
+```
+Run the policy and confirm it passes. Then, try changing the values of the rules and see how it affects the result.
+
+**Explanation:**
+By making rules depend on each other, you can express more nuanced policy requirements, such as requiring a certain number of conditions to be true.
 
 ---
 
@@ -68,12 +104,24 @@ Functions let you encapsulate logic and reuse it in rules. Sentinel supports bot
    ```
 You should see `PASS`. The function `double` is used in the `main` rule.
 
-**Try this:**
-- Change the argument to `double(5)` and update the rule.
-- Add another function, e.g., `triple = func(x) { x * 3 }`, and use it in a rule.
+**Now try the following to see how functions can be reused:**
+- Edit `functions.sentinel` and change the argument to `double(5)`:
+  ```hcl
+  main = rule { double(5) == 10 }
+  ```
+  Run the policy and confirm it passes. This shows how you can reuse the same function with different inputs.
+- Add another function to `functions.sentinel`:
+  ```hcl
+  triple = func(x) { x * 3 }
+  ```
+  Then use it in a rule:
+  ```hcl
+  main = rule { triple(2) == 6 }
+  ```
+  Run the policy and confirm it passes.
 
-**Reflection:**
-How do functions help you avoid repeating logic in your policies?
+**Explanation:**
+Functions help you avoid repeating logic and make your policies easier to maintain.
 
 ---
 
@@ -87,12 +135,24 @@ Functions can take multiple arguments and return different types.
    ```
 2. Run the policy and confirm it passes.
 
-**Try this:**
-- Write a function that returns a boolean, e.g., `is_even = func(x) { x % 2 == 0 }`.
-- Use it in a rule: `main = rule { is_even(4) }`.
+**Now try the following to practice writing different functions:**
+- Write a function that returns a boolean:
+  ```hcl
+  is_even = func(x) { x % 2 == 0 }
+  main = rule { is_even(4) }
+  ```
+  Run the policy and confirm it passes.
 
 **Challenge:**
-Write a function that returns the maximum of two numbers and use it in a rule.
+Write a function that returns the maximum of two numbers and use it in a rule. For example:
+```hcl
+max = func(a, b) { if a > b { return a } else { return b } }
+main = rule { max(3, 5) == 5 }
+```
+Run the policy and confirm it passes. Try changing the arguments to see different results.
+
+**Explanation:**
+Functions with multiple arguments let you write more flexible and powerful logic in your policies.
 
 ---
 
@@ -111,14 +171,41 @@ You can use functions inside rules and combine multiple rules for more complex l
    ```bash
    sentinel apply composite.sentinel
    ```
-Try changing the argument to `is_even(5)` and see what happens.
+   You should see `PASS`.
 
-**Try this:**
-- Combine multiple functions in a rule.
-- Use a function to determine the outcome of more than one rule.
+**Now try the following to see how combining functions and rules works:**
+- Edit `composite.sentinel` and change the argument to `is_even(5)`:
+  ```hcl
+  allow = rule { is_even(5) }
+  main = rule { allow }
+  ```
+  Run the policy and observe the result (`FAIL`).
+- Combine multiple functions in a rule:
+  ```hcl
+  double = func(x) { x * 2 }
+  triple = func(x) { x * 3 }
+  main = rule { double(2) == 4 and triple(2) == 6 }
+  ```
+  Run the policy and confirm it passes.
+- Use a function to determine the outcome of more than one rule:
+  ```hcl
+  is_even = func(x) { x % 2 == 0 }
+  allow = rule { is_even(2) }
+  deny = rule { !is_even(3) }
+  main = rule { allow and deny }
+  ```
+  Run the policy and confirm it passes.
 
 **Challenge:**
-Write a policy where `main` passes only if a function returns true for at least two different inputs.
+Write a policy in `composite.sentinel` where `main` passes only if a function returns true for at least two different inputs. For example:
+```hcl
+is_even = func(x) { x % 2 == 0 }
+main = rule { is_even(2) and is_even(4) }
+```
+Run the policy and confirm it passes. Try changing one of the arguments to an odd number and see how it affects the result.
+
+**Explanation:**
+Combining rules and functions lets you express complex requirements in a clear and reusable way.
 
 ---
 
@@ -133,8 +220,17 @@ Write a policy where `main` passes only if a function returns true for at least 
    ```
 2. Run the policy and observe the result.
 
-**Try this:**
-- Nest more functions or use more complex logic in your rules.
+**Now try the following to practice nesting functions:**
+- Edit `composite.sentinel` and nest more functions or use more complex logic, for example:
+  ```hcl
+  add = func(a, b) { a + b }
+  multiply = func(a, b) { a * b }
+  main = rule { multiply(add(2, 3), 2) == 10 }
+  ```
+  Run the policy and confirm it passes.
+
+**Explanation:**
+Nesting functions allows you to build up more advanced logic and reuse smaller pieces of code.
 
 ### 7. Error Handling in Functions
 1. Create a file `error-func.sentinel`:
@@ -146,7 +242,10 @@ Write a policy where `main` passes only if a function returns true for at least 
    ```bash
    sentinel apply error-func.sentinel
    ```
-What error do you see? How does Sentinel handle invalid operations in functions?
+   You should see an error message about division by zero. Sentinel will report a runtime error and the policy will fail.
+
+**Explanation:**
+This demonstrates how Sentinel handles invalid operations in functions. It's important to consider error cases when writing your own functions.
 
 ---
 

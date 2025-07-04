@@ -99,19 +99,26 @@ You should see `PASS`. This means the import worked and the rule evaluated as ex
 
 The Sentinel CLI offers options for debugging and exploring policy behavior. Let's try some of them.
 
-### 8. Run with Trace Output
-To see detailed evaluation steps, it's best to observe a failing policy. Let's make your policy fail and then use the `-trace` flag to debug it:
+### 8. Debugging with Trace Output (Working Example)
+The `-trace` flag is most useful for debugging more complex policies. Let's create a policy where trace output provides meaningful information.
 
-1. Edit `import-test.sentinel` and change the rule so it will fail:
+1. In your `lab1` directory, create a file called `trace-example.sentinel` with this content:
    ```hcl
    import "strings"
-   main = rule { strings.has_prefix("sentinel", "nope") }
+
+   check_prefix = func(s) {
+     return strings.has_prefix(s, "nope")
+   }
+
+   rule_one = rule { check_prefix("sentinel") }
+   rule_two = rule { check_prefix("nope") }
+   main = rule { rule_one and rule_two }
    ```
 2. Run the policy with trace output:
    ```bash
-   sentinel apply import-test.sentinel -trace
+   sentinel apply trace-example.sentinel -trace
    ```
-You should now see extra information printed, showing how Sentinel evaluated your policy and where it failed. This can help you understand and debug your policies.
+You should now see detailed information about the evaluation of each rule and function, including which rules failed and the values returned. This helps you understand how Sentinel processes your policy and where it fails.
 
 ### 9. Explore More Help
 You can always get more information about any command or option. For example, to see all options for `apply`, run:

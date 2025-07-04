@@ -38,8 +38,6 @@ You should see `PASS`. Try changing the suffix to something else and observe the
 - `main = rule { strings.has_suffix("sentinel", "nel") }` defines the main rule for the policy. It uses the `has_suffix` function from the `strings` import to check if the string `"sentinel"` ends with the substring `"nel"`.
 - If `strings.has_suffix("sentinel", "nel")` returns `true`, the rule passes and you see `PASS`. If you change the suffix to something that doesn't match, the rule will fail and you'll see `FAIL`.
 
-This pattern lets you use powerful string operations in your policies, making it easy to check names, patterns, or other text-based conditions.
-
 **Now try the following:**
 - Edit `strings-import.sentinel` to use `strings.has_prefix` instead:
   ```hcl
@@ -47,32 +45,38 @@ This pattern lets you use powerful string operations in your policies, making it
   main = rule { strings.has_prefix("sentinel", "sen") }
   ```
   Run the policy and observe the result.
-- Try using `strings.contains("sentinel", "tin")` in the rule and see if it passes.
 
 **Explanation:**
 String operations help you write more flexible policies by allowing you to check for patterns, prefixes, or substrings in resource names, user roles, or other data.
 
 ---
 
-### 2. Explore Other Imports
-Sentinel includes imports for math, collections, and more. Let's try them out.
+### 2. Explore Other Imports (Conceptual Example)
+Sentinel allows you to use imports to access external data and functions, but the available imports depend on your environment. Here is a conceptual example from the official documentation:
 
-1. Create a file named `math-import.sentinel`:
+1. Create a file named `calendar-import.sentinel`:
    ```hcl
-   import "math"
-   main = rule { math.abs(-5) == 5 }
+   import "calendar"
+
+   // Get the calendar for Bob for today
+   bob_calendar = calendar.for("bob").today
+
+   // Allow this policy to pass if Bob is not on vacation.
+   main = rule { not bob_calendar.has_event("vacation") }
    ```
 2. Run:
    ```bash
-   sentinel apply math-import.sentinel
+   sentinel apply calendar-import.sentinel
    ```
 
 **How this works:**
-- `import "math"` brings in the built-in `math` library, which provides mathematical functions.
-- `main = rule { math.abs(-5) == 5 }` defines the main rule for the policy. It uses the `abs` (absolute value) function from the `math` import to convert `-5` to `5`, then checks if the result equals `5`.
-- If the result is `true`, the rule passes and you see `PASS`. If you change the value or the comparison, the rule may fail.
+- `import "calendar"` brings in a (hypothetical) external library called `calendar`.
+- `calendar.for("bob").today` gets Bob’s calendar for today.
+- `bob_calendar.has_event("vacation")` checks if Bob has a vacation event.
+- The `main` rule passes if Bob is **not** on vacation.
 
-Try using other math functions, such as `math.max(3, 7)`, to see how the import can help with different calculations.
+**Note:**
+This is a conceptual example from the [Sentinel documentation](https://developer.hashicorp.com/sentinel/docs/language/imports). The actual imports available depend on your Sentinel environment. This example demonstrates the syntax and logic for using imports in Sentinel policies.
 
 1. Create a file named `collections-import.sentinel`:
    ```hcl

@@ -74,6 +74,9 @@ Let’s make rules depend on each other in a more policy-like way.
    ```
 2. Run the policy and observe the result.
 
+**Explanation:**
+With these values, `is_weekend` is `false` (so `!is_weekend` is `true`), but `is_holiday` is `true` (so `!is_holiday` is `false`). Since `can_deploy` requires both to be true, the result is `false` and the policy fails. This is expected.
+
 **Now try the following to see how rule dependencies work:**
 - Add a rule for `maintenance_mode`:
   ```hcl
@@ -84,6 +87,9 @@ Let’s make rules depend on each other in a more policy-like way.
   can_deploy = rule { !is_weekend and !is_holiday and !maintenance_mode }
   ```
   Run the policy and see how toggling these rules affects the outcome.
+
+**Explanation:**
+With the current values, `can_deploy` is still `false` because `!is_holiday` is `false`. To make the policy pass, set all three to `false` so that all the `!` conditions are `true`. This demonstrates how changing the values of dependent rules directly affects the policy outcome.
 
 **Challenge:**
 Write a policy where `main` passes only if at least two out of three conditions (`is_weekend`, `is_holiday`, `maintenance_mode`) are false. For example:
@@ -109,55 +115,76 @@ This models a deployment policy that depends on multiple environment factors.
 Functions let you encapsulate logic and reuse it in rules. Sentinel supports both built-in and user-defined functions.
 
 ### 3. Create a Simple Function
+
+**About Sentinel functions:**
+In Sentinel, you can define your own functions to encapsulate logic and reuse it in rules. Every function must include an explicit `return` statement to specify what value the function should output. If you forget the `return`, Sentinel will produce a runtime error and your policy will fail.
+
+Let's practice creating and using a simple function.
+
 1. Create a file named `functions.sentinel`:
    ```hcl
-   double = func(x) { x * 2 }
+   double = func(x) { return x * 2 }
    main = rule { double(3) == 6 }
    ```
 2. Run:
    ```bash
    sentinel apply functions.sentinel
    ```
-You should see `PASS`. The function `double` is used in the `main` rule.
+   You should see `PASS`. The function `double` is used in the `main` rule to check if doubling 3 equals 6.
 
 **Now try the following to see how functions can be reused:**
 - Edit `functions.sentinel` and change the argument to `double(5)`:
   ```hcl
+  double = func(x) { return x * 2 }
   main = rule { double(5) == 10 }
   ```
   Run the policy and confirm it passes. This shows how you can reuse the same function with different inputs.
 - Add another function to `functions.sentinel`:
   ```hcl
-  triple = func(x) { x * 3 }
-  ```
-  Then use it in a rule:
-  ```hcl
+  double = func(x) { return x * 2 }
+  triple = func(x) { return x * 3 }
   main = rule { triple(2) == 6 }
   ```
   Run the policy and confirm it passes.
 
 **Explanation:**
-Functions help you avoid repeating logic and make your policies easier to maintain.
+Functions help you avoid repeating logic and make your policies easier to maintain. Always remember to use `return` in your function definitions to avoid runtime errors.
 
 ---
 
 ### 4. Functions with Multiple Arguments and Return Types
-Functions can take multiple arguments and return different types.
+
+**How Sentinel functions work:**
+Sentinel functions are reusable blocks of logic that you define with the `func` keyword. You can pass one or more arguments to a function, and the function will return a value based on those arguments. The value can be any type supported by Sentinel, such as a number, boolean, string, or even a collection. You must always use an explicit `return` statement to specify what the function outputs.
+
+**Why use functions with multiple arguments or different return types?**
+In real policies, you often need to perform calculations or checks that depend on more than one value. For example, you might want to compare two numbers, check if a user has a specific role, or validate that a resource meets certain criteria. By writing functions that accept multiple arguments, you can make your policies more flexible and avoid repeating similar logic in multiple places. Functions that return booleans are especially useful for rules, while functions that return numbers or strings can be used for calculations or further checks.
+
+Let's practice writing and using such functions.
 
 1. Edit `functions.sentinel` to:
    ```hcl
-   add = func(a, b) { a + b }
+   add = func(a, b) { return a + b }
    main = rule { add(2, 3) == 5 }
    ```
 2. Run the policy and confirm it passes.
 
+**How this function works:**
+- `add = func(a, b) { return a + b }` defines a function named `add` that takes two arguments, `a` and `b`.
+- Inside the function, `a + b` adds the two arguments together.
+- The `return` statement ensures the result of `a + b` is given back to wherever the function is called.
+- In the rule `main = rule { add(2, 3) == 5 }`, the function is called with `2` and `3` as arguments, so it returns `5`.
+- The rule checks if the result of `add(2, 3)` is equal to `5`. If it is, the rule passes.
+
+This pattern lets you write reusable logic for any two numbers you want to add, and you can use the result in other rules or calculations.
+
 **Now try the following to practice writing different functions:**
 - Write a function that returns a boolean:
   ```hcl
-  is_even = func(x) { x % 2 == 0 }
+  is_even = func(x) { return x % 2 == 0 }
   main = rule { is_even(4) }
   ```
-  Run the policy and confirm it passes.
+  Run the policy and confirm it passes. Here, `is_even` checks if a number is divisible by 2 and returns `true` or `false`.
 
 **Challenge:**
 Write a function that returns the maximum of two numbers and use it in a rule. For example:
@@ -168,7 +195,10 @@ main = rule { max(3, 5) == 5 }
 Run the policy and confirm it passes. Try changing the arguments to see different results.
 
 **Explanation:**
-Functions with multiple arguments let you write more flexible and powerful logic in your policies.
+- You define a function with `func(name, ...) { ... }` and use `return` to specify the output.
+- Arguments are passed in parentheses, e.g., `add(2, 3)`.
+- The function can return any value, and you can use the result in rules or other functions.
+- Functions with multiple arguments let you write more flexible and powerful logic, making your policies easier to maintain and adapt to new requirements.
 
 ---
 

@@ -106,29 +106,49 @@ This example demonstrates how to use a `for` loop to sum the values in a list.
 
 ---
 
-### 2. Collecting Keys from a Map
+### 2. Working with Maps
 
-This example demonstrates how to use a `for` loop to collect the keys from a map.
+This example demonstrates how to create a map, access and modify elements, delete keys, and use the `keys()` and `values()` functions.
 
-1. Create a policy file named `map-keys.sentinel`:
+1. Create a policy file named `map-basics.sentinel`:
    ```sentinel
-   mymap = { "a": 1, "b": 2 }
-   keys = []
-   for mymap as k {
-     append(keys, k)
-   }
+   // Create a map
+   mymap = { "a": 2, "b": 3 }
 
-   main = rule { length(keys) == 2 && keys[0] == "a" && keys[1] == "b" }
+   // Access elements
+   a_val = mymap["a"]        // 2
+   missing_val = mymap["z"]  // undefined
+
+   // Add or modify elements
+   mymap["c"] = 5            // Add new key
+   mymap["a"] = 10           // Modify existing key
+
+   // Delete an element
+   delete(mymap, "b")
+
+   // Get keys and values
+   map_keys = keys(mymap)
+   map_values = values(mymap)
+
+   // Check map state
+   main = rule {
+     mymap["a"] == 10 &&
+     mymap["c"] == 5 &&
+     mymap["b"] is undefined &&
+     length(map_keys) == 2 &&
+     length(map_values) == 2
+   }
    ```
 2. Run:
    ```bash
-   sentinel apply map-keys.sentinel
+   sentinel apply map-basics.sentinel
    ```
-   You should see `PASS` if the keys are collected as expected. Try changing the map or the rule to experiment.
+   You should see `PASS` if the map operations are correct. Try adding, modifying, or deleting keys and rerun to experiment.
 
 **Explanation:**
-- The `for` loop iterates over the map and appends each key to the `keys` list.
-- The rule checks the length and order of the keys.
+- The example shows how to create, access, modify, and delete map elements.
+- It demonstrates the use of `keys()` and `values()` to retrieve map keys and values as lists.
+- The rule checks the final state of the map.
 
 ---
 

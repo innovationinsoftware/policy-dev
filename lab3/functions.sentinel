@@ -1,0 +1,2 @@
+max = func(a, b) { if a > b { return a } else { return b } }
+main = rule { max(3, 5) == 5 }

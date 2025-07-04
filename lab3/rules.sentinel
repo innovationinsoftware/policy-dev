@@ -1,0 +1,8 @@
+is_weekend = rule { false }
+is_holiday = rule { true }
+maintenance_mode = rule { false }
+main = rule {
+  (!is_weekend and !is_holiday) or
+  (!is_weekend and !maintenance_mode) or
+  (!is_holiday and !maintenance_mode)
+}

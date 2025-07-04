@@ -1,2 +1,0 @@
-import "collections"
-main = rule { collections.length([1,2,3]) == 3 }

@@ -1,2 +1,0 @@
-double = func(x) { return x * 2 }
-triple = func(x) { return x * 3 }

@@ -1,5 +1,0 @@
-import "time"
-
-is_weekday = rule { true }
-is_open_hours = rule { true }
-main = rule { is_open_hours and is_weekday }

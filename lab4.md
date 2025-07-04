@@ -81,81 +81,48 @@ By setting both `is_weekday` and `is_open_hours` to `true`, the `main` rule will
 
 Modules let you organize and reuse code across multiple policies. While advanced usage is rare in simple policies, it's important to know the basics and best practices.
 
-### 3. Create and Use a Simple Module
-1. Create a file named `util.sentinel`:
+### 3. Using Modules Locally with the Sentinel CLI (Runnable Example)
+
+You can use modules locally with the open-source Sentinel CLI by configuring them in a Sentinel configuration file. Here’s how to do it:
+
+1. Create a module file at `lab4/modules/foo.sentinel`:
    ```hcl
-   double = func(x) { return x * 2 }
-   triple = func(x) { return x * 3 }
+   // modules/foo.sentinel
+   hello = func() {
+     print("hello world!")
+     return undefined
+   }
    ```
-2. In another file, `use-module.sentinel`, import and use the module:
+
+2. Create a policy file named `lab4/policy.sentinel`:
    ```hcl
-   import "./util.sentinel" as util
-   main = rule { util.double(4) == 8 and util.triple(3) == 9 }
+   import "foo"
+
+   foo.hello()
+
+   main = true
    ```
-3. Run:
+
+3. In the same directory as your policy, create a Sentinel configuration file named `sentinel.hcl`:
+   ```hcl
+   import "module" "foo" {
+     source = "./modules/foo.sentinel"
+   }
+   ```
+
+4. Run your policy:
    ```bash
-   sentinel apply use-module.sentinel
+   sentinel apply policy.sentinel
    ```
-You should see `PASS`. This demonstrates how to import and use a local module.
+   You should see `hello world!` printed in the trace output and the policy should pass.
 
-**Now try the following:**
-- Add another function to `util.sentinel`, for example:
-  ```hcl
-  quadruple = func(x) { return x * 4 }
-  ```
-  Then use it in `use-module.sentinel`:
-  ```hcl
-  main = rule { util.quadruple(2) == 8 }
-  ```
-  Run the policy and confirm it passes.
-- Try importing the same module in multiple policy files to see how code reuse works.
+**How this works:**
+- The `sentinel.hcl` configuration file tells Sentinel to load the module from `modules/foo.sentinel` and make it available as `foo` in your policy.
+- In your policy, you import the module with `import "foo"` and call its function with `foo.hello()`.
+- The `main = true` rule ensures the policy always passes.
 
-**Explanation:**
-Using modules helps you avoid code duplication and makes it easier to update logic in one place for all policies that use it.
-
----
-
-### 4. Best Practices for Modular Policy Design
-
-Organizing your policies into modules can make them easier to maintain and reuse. Let's explore some best practices.
-
-1. Create a module `mathutils.sentinel` with several math functions. For example:
-   ```hcl
-   add = func(a, b) { return a + b }
-   subtract = func(a, b) { return a - b }
-   multiply = func(a, b) { return a * b }
-   ```
-2. Create a policy that imports `mathutils.sentinel` and uses multiple functions. For example, in `use-mathutils.sentinel`:
-   ```hcl
-   import "./mathutils.sentinel" as mathutils
-   main = rule { mathutils.add(2, 3) == 5 and mathutils.multiply(2, 3) == 6 }
-   ```
-3. Run:
-   ```bash
-   sentinel apply use-mathutils.sentinel
-   ```
-   You should see `PASS`.
-4. Try updating a function in the module (e.g., change `add` to return `a + b + 1`) and see how it affects all policies that import it.
-
-**Challenge:**
-Refactor a previous policy to use a module for all custom functions. For example, move your `double`, `triple`, and `quadruple` functions into a module called `customfuncs.sentinel`, then import and use them in a new policy file:
-```hcl
-# customfuncs.sentinel
-
-double = func(x) { return x * 2 }
-triple = func(x) { return x * 3 }
-quadruple = func(x) { return x * 4 }
-```
-```hcl
-# use-customfuncs.sentinel
-import "./customfuncs.sentinel" as cf
-main = rule { cf.double(2) == 4 and cf.triple(2) == 6 and cf.quadruple(2) == 8 }
-```
-Run:
-```bash
-sentinel apply use-customfuncs.sentinel
-```
-You should see `PASS`.
+**Note:**
+This is the supported way to use modules locally with the open-source Sentinel CLI. For more details, see the [official documentation](https://developer.hashicorp.com/sentinel/docs/extending/modules).
 
 ---
 

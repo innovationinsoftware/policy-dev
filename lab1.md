@@ -99,26 +99,27 @@ You should see `PASS`. This means the import worked and the rule evaluated as ex
 
 The Sentinel CLI offers options for debugging and exploring policy behavior. Let's try some of them.
 
-### 8. Debugging with Trace Output (Working Example)
-The `-trace` flag is most useful for debugging more complex policies. Let's create a policy where trace output provides meaningful information.
+### 8. Using CLI Options: Passing Parameters
 
-1. In your `lab1` directory, create a file called `trace-example.sentinel` with this content:
+The Sentinel CLI allows you to pass parameters to your policy using the `-param` flag. This is useful for testing how your policy behaves with different inputs.
+
+1. In your `lab1` directory, create a file called `param-example.sentinel` with this content:
    ```hcl
-   import "strings"
-
-   check_prefix = func(s) {
-     return strings.has_prefix(s, "nope")
-   }
-
-   rule_one = rule { check_prefix("sentinel") }
-   rule_two = rule { check_prefix("nope") }
-   main = rule { rule_one and rule_two }
+   main = rule { input == "test" }
    ```
-2. Run the policy with trace output:
+2. Run the policy with a parameter:
    ```bash
-   sentinel apply trace-example.sentinel -trace
+   sentinel apply param-example.sentinel -param 'input=test'
    ```
-You should now see detailed information about the evaluation of each rule and function, including which rules failed and the values returned. This helps you understand how Sentinel processes your policy and where it fails.
+   You should see `PASS`.
+
+3. Try changing the parameter value:
+   ```bash
+   sentinel apply param-example.sentinel -param 'input=fail'
+   ```
+   You should see `FAIL`.
+
+This demonstrates how you can use CLI options to make your policies dynamic and test different scenarios.
 
 ### 9. Explore More Help
 You can always get more information about any command or option. For example, to see all options for `apply`, run:

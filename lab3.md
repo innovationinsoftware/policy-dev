@@ -262,10 +262,17 @@ Combining rules and functions lets you express complex requirements in a clear a
 1. Edit `composite.sentinel` to:
    ```hcl
    add = func(a, b) { return a + b }
-   is_sum_even = func(a, b) { add(a, b) % 2 == 0 }
+   is_sum_even = func(a, b) { return add(a, b) % 2 == 0 }
    main = rule { is_sum_even(2, 4) }
    ```
 2. Run the policy and observe the result.
+
+**How these functions work:**
+- `add = func(a, b) { return a + b }` defines a function named `add` that takes two arguments, `a` and `b`, and returns their sum.
+- `is_sum_even = func(a, b) { return add(a, b) % 2 == 0 }` defines a function that takes two arguments, calls the `add` function to get their sum, then checks if the sum is even by using the modulo operator (`% 2 == 0`). It returns `true` if the sum is even, `false` otherwise.
+- `main = rule { is_sum_even(2, 4) }` calls `is_sum_even` with `2` and `4` as arguments. `add(2, 4)` returns `6`, and `6 % 2 == 0` is `true`, so the rule passes.
+
+This example shows how you can build more complex logic by combining and nesting functions, making your policies more modular and easier to maintain.
 
 **Now try the following to practice nesting functions:**
 - Edit `composite.sentinel` and nest more functions or use more complex logic, for example:
@@ -282,17 +289,17 @@ Nesting functions allows you to build up more advanced logic and reuse smaller p
 ### 7. Error Handling in Functions
 1. Create a file `error-func.sentinel`:
    ```hcl
-   divide = func(a, b) { return a / b }
-   main = rule { divide(4, 0) == 0 }
+   get_value = func(x) { return y + 1 }
+   main = rule { get_value(5) == 6 }
    ```
 2. Run:
    ```bash
    sentinel apply error-func.sentinel
    ```
-   You should see an error message about division by zero. Sentinel will report a runtime error and the policy will fail.
+   You should see an error message about an undefined variable (`y`). Sentinel will report a runtime error and the policy will fail because `y` is not defined in the function.
 
 **Explanation:**
-This demonstrates how Sentinel handles invalid operations in functions. It's important to consider error cases when writing your own functions.
+This demonstrates how Sentinel handles errors when you reference a variable that does not exist in the current scope. It's important to make sure all variables you use in a function are either passed as arguments or defined within the function.
 
 ---
 

@@ -1,0 +1,2 @@
+import "./util.sentinel" as util
+main = rule { util.double(4) == 8 and util.triple(3) == 9 }

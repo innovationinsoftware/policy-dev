@@ -1,0 +1,5 @@
+import "foo"
+
+foo.hello()
+
+main = true

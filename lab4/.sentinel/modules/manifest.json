@@ -1,0 +1,10 @@
+{
+	"records": [
+		{
+			"key": "foo",
+			"source": "./modules/foo.sentinel",
+			"sourceSum": "",
+			"dest": "C:/Users/Admin/Documents/software/policy-dev/lab4/modules/foo.sentinel"
+		}
+	]
+}

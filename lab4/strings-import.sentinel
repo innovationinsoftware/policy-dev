@@ -1,0 +1,2 @@
+import "strings"
+main = rule { strings.has_prefix("sentinel", "sen") }

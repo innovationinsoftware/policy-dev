@@ -66,7 +66,7 @@ You should now see `FAIL`. This demonstrates how rules control policy outcomes.
 Sentinel supports functions for reusable logic. Let's add a simple function to your policy:
 1. Edit `hello.sentinel` to:
    ```hcl
-   double = func(x) { x * 2 }
+   double = func(x) { return x * 2 }
    main = rule { double(2) is 4 }
    ```
 2. Run:
@@ -82,7 +82,7 @@ You should see `PASS`. This shows how you can define and use functions in your p
 Sentinel includes built-in imports (libraries) for common operations, such as string manipulation. Let's try one out.
 
 ### 7. Use a Built-in Import
-1. Create a new file called `import-test.sentinel` with this content:
+1. Create a new file called `import-test.sentinel` in the lab1 directory with this content:
    ```hcl
    import "strings"
    main = rule { strings.has_prefix("sentinel", "sen") }
@@ -100,11 +100,18 @@ You should see `PASS`. This means the import worked and the rule evaluated as ex
 The Sentinel CLI offers options for debugging and exploring policy behavior. Let's try some of them.
 
 ### 8. Run with Trace Output
-The `-trace` flag shows detailed evaluation steps, which is useful for debugging policies. Try it out:
-```bash
-sentinel apply import-test.sentinel -trace
-```
-Look at the extra information printed. This can help you understand how Sentinel evaluates your policy.
+To see detailed evaluation steps, it's best to observe a failing policy. Let's make your policy fail and then use the `-trace` flag to debug it:
+
+1. Edit `import-test.sentinel` and change the rule so it will fail:
+   ```hcl
+   import "strings"
+   main = rule { strings.has_prefix("sentinel", "nope") }
+   ```
+2. Run the policy with trace output:
+   ```bash
+   sentinel apply import-test.sentinel -trace
+   ```
+You should now see extra information printed, showing how Sentinel evaluated your policy and where it failed. This can help you understand and debug your policies.
 
 ### 9. Explore More Help
 You can always get more information about any command or option. For example, to see all options for `apply`, run:

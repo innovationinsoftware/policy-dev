@@ -21,7 +21,7 @@ All commands and files in this lab should be created and run inside the `lab6` d
 
 Testing policies helps you:
 - Catch logic errors before deployment
-- Simulate real-world scenarios (like different times of day)
+- Simulate real-world scenarios
 - Ensure policies are robust and reliable
 - Build confidence in your policy-as-code workflows
 
@@ -72,7 +72,7 @@ We'll create a directory for our policy's tests and add individual test case fil
      }
    }
    ```
-3. Create a test case file for 1pm (should fail):
+3. Create a test case file for 1pm (should pass, expect `main = false`):
    Create `test/time-policy/fail-1pm.hcl`:
    ```hcl
    mock "time" {
@@ -89,7 +89,7 @@ We'll create a directory for our policy's tests and add individual test case fil
      }
    }
    ```
-4. Create a test case file for noon (should fail):
+4. Create a test case file for noon (should pass, expect `main = false`):
    Create `test/time-policy/edge-noon.hcl`:
    ```hcl
    mock "time" {
@@ -129,7 +129,47 @@ By writing separate test files for different times, you can be sure your policy 
 
 ---
 
-## Part 3: Running the Tests
+## Part 3: Demonstrating a Failing Test
+
+**What we're doing:**
+We'll create a test case that is intentionally incorrect (the expected value does not match what the policy will return), to show how Sentinel reports a FAIL.
+
+1. Create a test case file for 9am (should FAIL):
+   Create `test/time-policy/should-fail-9am.hcl`:
+   ```hcl
+   mock "time" {
+     data = {
+       now = {
+         hour = 9
+         minute = 0
+       }
+     }
+   }
+   test {
+     rules = {
+       main = false
+     }
+   }
+   ```
+2. Run the tests:
+   ```bash
+   sentinel test
+   ```
+   You should see output like:
+   ```
+   FAIL - time-policy.sentinel
+     FAIL - test/time-policy/should-fail-9am.hcl
+       expected "main" to be false, got: true
+   ...
+   ```
+   This shows that the test failed because the policy returned `true` for `main`, but you expected `false`.
+
+**Why this is useful:**
+This demonstrates how Sentinel reports a test as FAIL when the policy does not match your expectation. Use this to catch logic errors or unexpected behavior in your policies.
+
+---
+
+## Part 4: Running the Tests
 
 **What we're doing:**
 We'll run all the test cases for our policy using the Sentinel CLI.
@@ -142,18 +182,18 @@ We'll run all the test cases for our policy using the Sentinel CLI.
    ```bash
    sentinel test time-policy.sentinel
    ```
-   You should see output indicating which tests passed or failed, along with the test file names.
+   You should see output indicating which tests passed or failed, along with the test file names. If you included the intentionally failing test, you will see a FAIL for that case.
 
 **Why this is useful:**
 This lets you quickly verify your policy logic for a variety of scenarios, and the test output will show you exactly which cases pass or fail.
 
 ---
 
-## Part 4: Simulating Policy Inputs (with the Time Import)
+## Part 5: Simulating Policy Inputs (with the Time Import)
 
 You can use the `sentinel apply` command with different mock data in `sentinel.hcl` to simulate how your policy behaves at different times. This is useful for ad-hoc testing and for simulating edge cases.
 
-### 4. Simulate Different Times
+### 5. Simulate Different Times
 
 **What we're doing:**
 We'll change the mock time in `sentinel.hcl` and see how the policy responds.
@@ -181,11 +221,11 @@ This lets you quickly test your policy for any time of day, without waiting for 
 
 ---
 
-## Part 5: Advanced Testing Features (with the Time Import)
+## Part 6: Advanced Testing Features (with the Time Import)
 
 Sentinel's testing framework supports more advanced features, such as custom messages, negative tests, and test file organization.
 
-### 5. Add More Test Cases and Edge Cases
+### 6. Add More Test Cases and Edge Cases
 
 **What we're doing:**
 We'll add more test case files to cover edge times and clarify the expected outcome.
@@ -231,7 +271,7 @@ Testing edge cases (like just before and after noon) ensures your policy logic i
 
 ---
 
-## Part 6: Organizing and Running Multiple Policies
+## Part 7: Organizing and Running Multiple Policies
 
 As your policy library grows, you may want to organize tests for different policies or scenarios. Repeat the above structure for each policy you want to test.
 
@@ -249,7 +289,7 @@ Keeping your tests organized makes it easier to maintain and expand your policy 
 
 ---
 
-## Part 7: Test Coverage and Best Practices
+## Part 8: Test Coverage and Best Practices
 
 Testing is most effective when you cover a wide range of scenarios:
 - Valid and invalid times
@@ -268,7 +308,7 @@ Write a comprehensive set of test files for a time-based policy that covers:
 
 ---
 
-## Part 8: Debugging and Test Output
+## Part 9: Debugging and Test Output
 
 Sentinel provides detailed output for failed tests, including which rule failed and why. You can use the `-verbose` flag for more information.
 
@@ -294,5 +334,6 @@ In this lab, you:
 - Explored advanced testing features and test organization
 - Practiced debugging and interpreting test output
 - Learned best practices for time-based policy testing
+- Demonstrated both passing and failing test cases
 
 You now have the skills to confidently test, simulate, and maintain Sentinel policies in real-world environments using the open-source CLI! 

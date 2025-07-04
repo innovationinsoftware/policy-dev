@@ -1,7 +1,5 @@
 # HashiCorp Sentinel Lab 8: Complex Policy Logic
 
-> **NOTE:** The open-source Sentinel CLI does **not** support an `input` variable or import. All data must be provided via supported imports (like `time`), static imports (using `import "static"`), or parameters. This lab uses only features available in the open-source CLI. See [Sentinel documentation](https://developer.hashicorp.com/sentinel/docs/configuration#mock-imports) for details.
-
 ## Overview
 In this lab, you'll learn how to write more complex Sentinel policies using conditional statements and iteration. These features allow you to express advanced logic, handle multiple resources, and enforce nuanced rules. By the end, you'll be able to write policies that adapt to different inputs and evaluate collections of data.
 
@@ -21,9 +19,9 @@ All commands and files in this lab should be created and run inside the `lab8` d
 
 ## Part 1: Conditional Statements
 
-Conditional statements let you write policies that behave differently based on data. Sentinel supports `if`, `else if`, and `else` just like many programming languages.
+Conditional statements let you write policies that behave differently based on data. Sentinel supports `if`, `else if`, and `else` in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/conditionals)).
 
-### 1. Using If/Else in Policies with Static Imports
+### 1. Using Boolean Logic in Rules with Static Imports
 
 Let's start with a policy that enforces different CPU limits based on the environment, using a static import for data.
 
@@ -33,14 +31,12 @@ Let's start with a policy that enforces different CPU limits based on the enviro
    ```
 2. Create a policy file named `conditional-cpu.sentinel`:
    ```hcl
-   import "static" "envdata"
-   main = rule {
-     if envdata.env == "prod" {
-       envdata.cpu <= 4
-     } else {
-       envdata.cpu <= 2
-     }
-   }
+   import "static"
+
+   prod_ok = envdata.env == "prod" && envdata.cpu <= 4
+   nonprod_ok = envdata.env != "prod" && envdata.cpu <= 2
+
+   main = rule { prod_ok or nonprod_ok }
    ```
 3. Create or edit a configuration file named `sentinel.hcl`:
    ```hcl
@@ -66,11 +62,56 @@ Let's start with a policy that enforces different CPU limits based on the enviro
    Try changing `cpu` to 3 and rerun. What result do you get?
 
 **Try this:**
-- Add an `else if` branch for a `test` environment with a different limit.
-- Add a print statement to show which branch is being evaluated.
+- Add a third condition for a `test` environment with a different limit, using another boolean expression.
 
 **Reflection:**
 How do conditional statements help you write more flexible policies?
+
+---
+
+### 2. Demonstrating 'if' Statements in the Global Scope
+
+Sentinel allows you to use `if`, `else if`, and `else` in the global scope to set variables based on conditions. This is useful for more complex logic that can't be expressed as a single boolean expression.
+
+**Example: Using 'if' to Set a Variable**
+
+1. Edit `envdata.json` to:
+   ```json
+   { "env": "prod", "cpu": 3 }
+   ```
+2. Create a policy file named `conditional-cpu-if.sentinel`:
+   ```hcl
+   import "static"
+
+   # Set the CPU limit based on the environment using 'if' in the global scope
+   cpu_limit = 0
+   if envdata.env == "prod" {
+     cpu_limit = 4
+   } else if envdata.env == "test" {
+     cpu_limit = 3
+   } else {
+     cpu_limit = 2
+   }
+
+   main = rule { envdata.cpu <= cpu_limit }
+   ```
+3. Edit `sentinel.hcl` to:
+   ```hcl
+   import "static" "envdata" {
+     source = "./envdata.json"
+     format = "json"
+   }
+   ```
+4. Run:
+   ```bash
+   sentinel apply conditional-cpu-if.sentinel
+   ```
+   You should see `PASS` for the above data. Try changing `env` to `test` or `dev` and `cpu` to different values in `envdata.json` to see how the policy behaves.
+
+**Explanation:**
+- The `if`/`else if`/`else` block sets the `cpu_limit` variable in the global scope.
+- The rule then checks if the provided `cpu` is within the allowed limit for the environment.
+- This pattern is the correct way to use conditional logic in Sentinel, as described in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/conditionals).
 
 ---
 

@@ -51,32 +51,29 @@ String operations help you write more flexible policies by allowing you to check
 
 ---
 
-### 2. Explore Other Imports (Conceptual Example)
-Sentinel allows you to use imports to access external data and functions, but the available imports depend on your environment. Here is a conceptual example from the official documentation:
+### 2. Explore Other Imports (Runnable Example)
+Sentinel allows you to use imports to access external data and functions, but the available imports depend on your environment. Here is an example using the real 'time' import, which is available in the open-source Sentinel CLI:
 
-1. Create a file named `calendar-import.sentinel`:
+1. Create a file named `time-import.sentinel`:
    ```hcl
-   import "calendar"
+   import "time"
 
-   // Get the calendar for Bob for today
-   bob_calendar = calendar.for("bob").today
-
-   // Allow this policy to pass if Bob is not on vacation.
-   main = rule { not bob_calendar.has_event("vacation") }
+   is_weekday = rule { true }
+   is_open_hours = rule { true }
+   main = rule { is_open_hours and is_weekday }
    ```
 2. Run:
    ```bash
-   sentinel apply calendar-import.sentinel
+   sentinel apply time-import.sentinel
    ```
 
 **How this works:**
-- `import "calendar"` brings in a (hypothetical) external library called `calendar`.
-- `calendar.for("bob").today` gets Bob’s calendar for today.
-- `bob_calendar.has_event("vacation")` checks if Bob has a vacation event.
-- The `main` rule passes if Bob is **not** on vacation.
+- `import "time"` brings in the built-in `time` library, which provides functions for working with time and dates.
+- `is_weekday = rule { true }` and `is_open_hours = rule { true }` are rules that always evaluate to `true`.
+- The `main` rule combines both and will always be `true`, so the policy will always pass.
 
-**Note:**
-This is a conceptual example from the [Sentinel documentation](https://developer.hashicorp.com/sentinel/docs/language/imports). The actual imports available depend on your Sentinel environment. This example demonstrates the syntax and logic for using imports in Sentinel policies.
+**Explanation:**
+By setting both `is_weekday` and `is_open_hours` to `true`, the `main` rule will always be `true`, so the policy will always pass. This is useful for testing or demonstration purposes.
 
 1. Create a file named `collections-import.sentinel`:
    ```hcl

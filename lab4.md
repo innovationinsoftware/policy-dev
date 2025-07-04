@@ -33,6 +33,13 @@ Sentinel provides several built-in imports (libraries) for tasks like string man
    ```
 You should see `PASS`. Try changing the suffix to something else and observe the result.
 
+**How this works:**
+- `import "strings"` brings in the built-in `strings` library, which provides functions for working with text.
+- `main = rule { strings.has_suffix("sentinel", "nel") }` defines the main rule for the policy. It uses the `has_suffix` function from the `strings` import to check if the string `"sentinel"` ends with the substring `"nel"`.
+- If `strings.has_suffix("sentinel", "nel")` returns `true`, the rule passes and you see `PASS`. If you change the suffix to something that doesn't match, the rule will fail and you'll see `FAIL`.
+
+This pattern lets you use powerful string operations in your policies, making it easy to check names, patterns, or other text-based conditions.
+
 **Now try the following:**
 - Edit `strings-import.sentinel` to use `strings.has_prefix` instead:
   ```hcl
@@ -59,7 +66,13 @@ Sentinel includes imports for math, collections, and more. Let's try them out.
    ```bash
    sentinel apply math-import.sentinel
    ```
-Try using other math functions, such as `math.max(3, 7)`.
+
+**How this works:**
+- `import "math"` brings in the built-in `math` library, which provides mathematical functions.
+- `main = rule { math.abs(-5) == 5 }` defines the main rule for the policy. It uses the `abs` (absolute value) function from the `math` import to convert `-5` to `5`, then checks if the result equals `5`.
+- If the result is `true`, the rule passes and you see `PASS`. If you change the value or the comparison, the rule may fail.
+
+Try using other math functions, such as `math.max(3, 7)`, to see how the import can help with different calculations.
 
 1. Create a file named `collections-import.sentinel`:
    ```hcl
@@ -70,7 +83,13 @@ Try using other math functions, such as `math.max(3, 7)`.
    ```bash
    sentinel apply collections-import.sentinel
    ```
-Try using `collections.contains([1,2,3], 2)`.
+
+**How this works:**
+- `import "collections"` brings in the built-in `collections` library, which provides functions for working with lists and other collections.
+- `main = rule { collections.length([1,2,3]) == 3 }` defines the main rule for the policy. It uses the `length` function from the `collections` import to count the number of items in the list `[1,2,3]` and checks if the result equals `3`.
+- If the result is `true`, the rule passes and you see `PASS`. If you change the list or the comparison, the rule may fail.
+
+Try using `collections.contains([1,2,3], 2)` to check if a value is present in the list.
 
 **Challenge:**
 Write a policy that uses both `math` and `collections` imports in the same rule. For example:

@@ -75,36 +75,6 @@ Sentinel allows you to use imports to access external data and functions, but th
 **Explanation:**
 By setting both `is_weekday` and `is_open_hours` to `true`, the `main` rule will always be `true`, so the policy will always pass. This is useful for testing or demonstration purposes.
 
-1. Create a file named `collections-import.sentinel`:
-   ```hcl
-   import "collections"
-   main = rule { collections.length([1,2,3]) == 3 }
-   ```
-2. Run:
-   ```bash
-   sentinel apply collections-import.sentinel
-   ```
-
-**How this works:**
-- `import "collections"` brings in the built-in `collections` library, which provides functions for working with lists and other collections.
-- `main = rule { collections.length([1,2,3]) == 3 }` defines the main rule for the policy. It uses the `length` function from the `collections` import to count the number of items in the list `[1,2,3]` and checks if the result equals `3`.
-- If the result is `true`, the rule passes and you see `PASS`. If you change the list or the comparison, the rule may fail.
-
-Try using `collections.contains([1,2,3], 2)` to check if a value is present in the list.
-
-**Challenge:**
-Write a policy that uses both `math` and `collections` imports in the same rule. For example:
-```hcl
-import "math"
-import "collections"
-main = rule { math.max(collections.length([1,2,3]), 2) == 3 }
-```
-Save this as `math-collections-challenge.sentinel` and run:
-```bash
-sentinel apply math-collections-challenge.sentinel
-```
-You should see `PASS`. Try changing the list or the comparison value to see different results.
-
 ---
 
 ## Part 2: Understanding and Using Modules

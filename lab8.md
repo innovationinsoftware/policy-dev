@@ -1,5 +1,7 @@
 # HashiCorp Sentinel Lab 8: Complex Policy Logic
 
+> **NOTE:** The open-source Sentinel CLI does **not** support an `input` variable or import. All data must be provided via supported imports (like `time`), static imports (using `import "static"`), or parameters. This lab uses only features available in the open-source CLI. See [Sentinel documentation](https://developer.hashicorp.com/sentinel/docs/configuration#mock-imports) for details.
+
 ## Overview
 In this lab, you'll learn how to write more complex Sentinel policies using conditional statements and iteration. These features allow you to express advanced logic, handle multiple resources, and enforce nuanced rules. By the end, you'll be able to write policies that adapt to different inputs and evaluate collections of data.
 
@@ -19,41 +21,49 @@ All commands and files in this lab should be created and run inside the `lab8` d
 
 ## Part 1: Conditional Statements
 
-Conditional statements let you write policies that behave differently based on input values. Sentinel supports `if`, `else if`, and `else` just like many programming languages.
+Conditional statements let you write policies that behave differently based on data. Sentinel supports `if`, `else if`, and `else` just like many programming languages.
 
-### 1. Using If/Else in Policies
+### 1. Using If/Else in Policies with Static Imports
 
-Let's start with a policy that enforces different CPU limits based on the environment.
+Let's start with a policy that enforces different CPU limits based on the environment, using a static import for data.
 
-1. Create a file named `conditional-cpu.sentinel`:
-   ```hcl
-   main = rule {
-     if input.env == "prod" {
-       input.cpu <= 4
-     } else {
-       input.cpu <= 2
-     }
-   }
-   ```
-2. Create a mock data file named `prod-mock.json`:
+1. Create a data file named `envdata.json`:
    ```json
    { "env": "prod", "cpu": 3 }
    ```
-3. Run:
-   ```bash
-   sentinel apply conditional-cpu.sentinel -input prod-mock.json
+2. Create a policy file named `conditional-cpu.sentinel`:
+   ```hcl
+   import "static" "envdata"
+   main = rule {
+     if envdata.env == "prod" {
+       envdata.cpu <= 4
+     } else {
+       envdata.cpu <= 2
+     }
+   }
    ```
-You should see `PASS`. Try changing `cpu` to 5 and rerun. What happens?
+3. Create or edit a configuration file named `sentinel.hcl`:
+   ```hcl
+   import "static" "envdata" {
+     source = "./envdata.json"
+     format = "json"
+   }
+   ```
+4. Run:
+   ```bash
+   sentinel apply conditional-cpu.sentinel
+   ```
+   You should see `PASS`. Edit `envdata.json` and change `cpu` to 5, then rerun. What happens?
 
-4. Create a mock data file named `dev-mock.json`:
+5. Edit `envdata.json` to:
    ```json
    { "env": "dev", "cpu": 2 }
    ```
-5. Run:
+6. Run:
    ```bash
-   sentinel apply conditional-cpu.sentinel -input dev-mock.json
+   sentinel apply conditional-cpu.sentinel
    ```
-Try changing `cpu` to 3 and rerun. What result do you get?
+   Try changing `cpu` to 3 and rerun. What result do you get?
 
 **Try this:**
 - Add an `else if` branch for a `test` environment with a different limit.
@@ -72,34 +82,40 @@ Sentinel supports iteration over lists and maps using the `foreach` and `filter`
 
 Suppose you want to ensure all VMs in a list have a tag `"owner"`.
 
-1. Create a file named `tags-iteration.sentinel`:
+1. Create a data file named `vms.json`:
+   ```json
+   [
+     { "name": "vm1", "tags": ["owner", "prod"] },
+     { "name": "vm2", "tags": ["owner"] },
+     { "name": "vm3", "tags": ["dev"] }
+   ]
+   ```
+2. Create a policy file named `tags-iteration.sentinel`:
    ```hcl
+   import "static" "vms"
    main = rule {
      all_owners = [
-       foreach vm in input.vms :
+       foreach vm in vms :
          "owner" in vm.tags
      ]
      all(all_owners)
    }
    ```
-2. Create a mock data file named `vms-mock.json`:
-   ```json
-   {
-     "vms": [
-       { "name": "vm1", "tags": ["owner", "prod"] },
-       { "name": "vm2", "tags": ["owner"] },
-       { "name": "vm3", "tags": ["dev"] }
-     ]
+3. Edit `sentinel.hcl` to:
+   ```hcl
+   import "static" "vms" {
+     source = "./vms.json"
+     format = "json"
    }
    ```
-3. Run:
+4. Run:
    ```bash
-   sentinel apply tags-iteration.sentinel -input vms-mock.json
+   sentinel apply tags-iteration.sentinel
    ```
-You should see `FAIL` because `vm3` is missing the `owner` tag.
+   You should see `FAIL` because `vm3` is missing the `owner` tag.
 
 **Try this:**
-- Add the `owner` tag to `vm3` and rerun. The policy should pass.
+- Add the `owner` tag to `vm3` in `vms.json` and rerun. The policy should pass.
 - Print the names of VMs missing the `owner` tag.
 
 **Challenge:**
@@ -113,10 +129,11 @@ You can use `filter` to select items from a list that meet a condition, and `len
 
 1. Edit `tags-iteration.sentinel` to:
    ```hcl
-   missing_owners = filter vm in input.vms : !("owner" in vm.tags)
+   import "static" "vms"
+   missing_owners = filter vm in vms : !("owner" in vm.tags)
    main = rule { length(missing_owners) == 0 }
    ```
-2. Run the policy. Try removing the `owner` tag from one or more VMs and observe the result.
+2. Run the policy. Try removing the `owner` tag from one or more VMs in `vms.json` and observe the result.
 
 **Try this:**
 - Print the number of VMs missing the `owner` tag.
@@ -130,11 +147,20 @@ You can use `filter` to select items from a list that meet a condition, and `len
 
 Combine conditionals and iteration for more advanced logic.
 
-1. Create a file named `complex-policy.sentinel`:
+1. Edit `vms.json` to provide a mix of prod and non-prod VMs, some missing tags:
+   ```json
+   [
+     { "name": "vm1", "tags": ["owner", "prod", "environment"] },
+     { "name": "vm2", "tags": ["owner", "prod"] },
+     { "name": "vm3", "tags": ["dev"] }
+   ]
+   ```
+2. Create a policy file named `complex-policy.sentinel`:
    ```hcl
+   import "static" "vms"
    main = rule {
      all([
-       foreach vm in input.vms :
+       foreach vm in vms :
          if "prod" in vm.tags {
            "owner" in vm.tags and "environment" in vm.tags
          } else {
@@ -143,7 +169,18 @@ Combine conditionals and iteration for more advanced logic.
      ])
    }
    ```
-2. Test with a mix of prod and non-prod VMs, some missing tags.
+3. Edit `sentinel.hcl` to:
+   ```hcl
+   import "static" "vms" {
+     source = "./vms.json"
+     format = "json"
+   }
+   ```
+4. Run:
+   ```bash
+   sentinel apply complex-policy.sentinel
+   ```
+   Observe which VMs are non-compliant by adjusting the logic or adding print statements.
 
 **Try this:**
 - Add a print statement to show which VMs are non-compliant.

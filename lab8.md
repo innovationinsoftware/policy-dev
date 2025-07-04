@@ -17,101 +17,62 @@ All commands and files in this lab should be created and run inside the `lab8` d
 
 ---
 
-## Part 1: Conditional Statements
+## Part 1: Conditionals in Sentinel (Based on Official Documentation)
 
-Conditional statements let you write policies that behave differently based on data. Sentinel supports `if`, `else if`, and `else` in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/conditionals)).
+Sentinel supports `if`, `else if`, and `else` statements in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/conditionals)).
 
-### 1. Using Boolean Logic in Rules with Static Imports
+### 1. Using `if` to Set a Variable (from the docs)
 
-Let's start with a policy that enforces different CPU limits based on the environment, using a static import for data.
+This example demonstrates how to use an `if` statement in the global scope to set a variable, and then use that variable in a rule.
 
-1. Create a data file named `envdata.json`:
-   ```json
-   { "env": "prod", "cpu": 3 }
-   ```
-2. Create a policy file named `conditional-cpu.sentinel`:
-   ```hcl
-   import "static"
-
-   prod_ok = envdata.env == "prod" && envdata.cpu <= 4
-   nonprod_ok = envdata.env != "prod" && envdata.cpu <= 2
-
-   main = rule { prod_ok or nonprod_ok }
-   ```
-3. Create or edit a configuration file named `sentinel.hcl`:
-   ```hcl
-   import "static" "envdata" {
-     source = "./envdata.json"
-     format = "json"
+1. Create a policy file named `if-variable.sentinel`:
+   ```sentinel
+   value = 12
+   if value == 18 {
+     result = true
+   } else {
+     result = false
    }
+
+   main = rule { result }
    ```
-4. Run:
+2. Run:
    ```bash
-   sentinel apply conditional-cpu.sentinel
+   sentinel apply if-variable.sentinel
    ```
-   You should see `PASS`. Edit `envdata.json` and change `cpu` to 5, then rerun. What happens?
+   You should see `FAIL` because `value` is not 18. Try changing `value` to 18 and rerun. You should see `PASS`.
 
-5. Edit `envdata.json` to:
-   ```json
-   { "env": "dev", "cpu": 2 }
-   ```
-6. Run:
-   ```bash
-   sentinel apply conditional-cpu.sentinel
-   ```
-   Try changing `cpu` to 3 and rerun. What result do you get?
-
-**Try this:**
-- Add a third condition for a `test` environment with a different limit, using another boolean expression.
-
-**Reflection:**
-How do conditional statements help you write more flexible policies?
+**Explanation:**
+- The `if` statement sets `result` based on the value of `value`.
+- The rule simply returns the value of `result`.
 
 ---
 
-### 2. Demonstrating 'if' Statements in the Global Scope
+### 2. Using `case` Statements (from the docs)
 
-Sentinel allows you to use `if`, `else if`, and `else` in the global scope to set variables based on conditions. This is useful for more complex logic that can't be expressed as a single boolean expression.
+This example demonstrates how to use a `case` statement in the global scope to set a variable, and then use that variable in a rule.
 
-**Example: Using 'if' to Set a Variable**
-
-1. Edit `envdata.json` to:
-   ```json
-   { "env": "prod", "cpu": 3 }
-   ```
-2. Create a policy file named `conditional-cpu-if.sentinel`:
-   ```hcl
-   import "static"
-
-   # Set the CPU limit based on the environment using 'if' in the global scope
-   cpu_limit = 0
-   if envdata.env == "prod" {
-     cpu_limit = 4
-   } else if envdata.env == "test" {
-     cpu_limit = 3
-   } else {
-     cpu_limit = 2
+1. Create a policy file named `case-variable.sentinel`:
+   ```sentinel
+   x = "foo"
+   case x {
+     when "foo", "bar":
+       result = true
+     else:
+       result = false
    }
 
-   main = rule { envdata.cpu <= cpu_limit }
+   main = rule { result }
    ```
-3. Edit `sentinel.hcl` to:
-   ```hcl
-   import "static" "envdata" {
-     source = "./envdata.json"
-     format = "json"
-   }
-   ```
-4. Run:
+2. Run:
    ```bash
-   sentinel apply conditional-cpu-if.sentinel
+   sentinel apply case-variable.sentinel
    ```
-   You should see `PASS` for the above data. Try changing `env` to `test` or `dev` and `cpu` to different values in `envdata.json` to see how the policy behaves.
+   You should see `PASS` because `x` is "foo". Try changing `x` to something else (like "baz") and rerun. You should see `FAIL`.
 
 **Explanation:**
-- The `if`/`else if`/`else` block sets the `cpu_limit` variable in the global scope.
-- The rule then checks if the provided `cpu` is within the allowed limit for the environment.
-- This pattern is the correct way to use conditional logic in Sentinel, as described in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/conditionals).
+- The `case` statement sets `result` to true if `x` is "foo" or "bar", otherwise false.
+- The rule returns the value of `result`.
 
 ---
 

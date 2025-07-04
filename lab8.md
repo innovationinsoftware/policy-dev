@@ -106,49 +106,78 @@ This example demonstrates how to use a `for` loop to sum the values in a list.
 
 ---
 
-### 2. Working with Maps
+### 2. Working with Maps (Direct from Official Docs)
 
-This example demonstrates how to create a map, access and modify elements, delete keys, and use the `keys()` and `values()` functions.
+This example demonstrates all the core map operations as shown in the [official Sentinel documentation on maps](https://developer.hashicorp.com/sentinel/docs/language/maps): creating a map, accessing elements, adding/modifying elements, deleting elements, using `keys()` and `values()`, and comparing maps.
 
-1. Create a policy file named `map-basics.sentinel`:
+1. Create a policy file named `map-examples.sentinel`:
    ```sentinel
-   // Create a map
-   mymap = { "a": 2, "b": 3 }
+   // Create maps
+   empty_map = {}
+   single_map = { "key": "value" }
+   multi_map = {
+     "key": "value",
+     42: true,
+   }
 
-   // Access elements
-   a_val = mymap["a"]        // 2
-   missing_val = mymap["z"]  // undefined
+   // Accessing elements
+   map = { "key": "value", 42: true, }
+   val1 = map["key"]    // "value"
+   val2 = map[42]        // true
+   val3 = map[0]         // undefined
 
-   // Add or modify elements
-   mymap["c"] = 5            // Add new key
-   mymap["a"] = 10           // Modify existing key
+   // Modifying or adding elements
+   map2 = { "key": "value" }
+   map2[42] = true   // Add a new key/value
+   map2["key"] = 12 // Modify the value of "key"
 
-   // Delete an element
-   delete(mymap, "b")
+   // Deleting elements
+   map3 = { "key": "value" }
+   delete(map3, "key")    // map3 is now empty
+   delete(map3, "other")  // no effect for non-existent key
 
-   // Get keys and values
-   map_keys = keys(mymap)
-   map_values = values(mymap)
+   // Keys and values
+   data = { "a": 2, "b": 3 }
+   data_keys = keys(data)       // e.g. ["b", "a"]
+   data_values = values(data)   // e.g. [2, 3]
 
-   // Check map state
+   // Map comparison
+   map_a = {"foo": "bar"}
+   map_b = {"foo": "bar"}
+   map_c = {"baz": "bar"}
+   map_d = {"foo": "baz"}
+   map_e = {"foo": "bar", "baz": "qux"}
+   map_f = {1: "a"}
+   map_g = {1.0: "a"}
+   map_h = {"m": {"a": "b"}, "l": ["a"]}
+   map_i = {"l": ["a"], "m": {"a": "b"}}
+
    main = rule {
-     mymap["a"] == 10 &&
-     mymap["c"] == 5 &&
-     mymap["b"] is undefined &&
-     length(map_keys) == 2 &&
-     length(map_values) == 2
+     val1 == "value" &&
+     val2 == true &&
+     val3 is undefined &&
+     map2[42] == true &&
+     map2["key"] == 12 &&
+     length(map3) == 0 &&
+     length(data_keys) == 2 &&
+     length(data_values) == 2 &&
+     map_a is map_b &&
+     !(map_a is map_c) &&
+     !(map_a is map_d) &&
+     !(map_a is map_e) &&
+     map_f is map_g &&
+     map_h is map_i
    }
    ```
 2. Run:
    ```bash
-   sentinel apply map-basics.sentinel
+   sentinel apply map-examples.sentinel
    ```
-   You should see `PASS` if the map operations are correct. Try adding, modifying, or deleting keys and rerun to experiment.
+   You should see `PASS` if all map operations and comparisons are correct. Try modifying the maps or the rule to experiment.
 
 **Explanation:**
-- The example shows how to create, access, modify, and delete map elements.
-- It demonstrates the use of `keys()` and `values()` to retrieve map keys and values as lists.
-- The rule checks the final state of the map.
+- This example covers all the core map operations: creation, access, modification, deletion, keys/values, and comparison.
+- The rule checks the results of each operation, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/maps).
 
 ---
 

@@ -1,0 +1,3 @@
+# Policy to demonstrate structure
+allow = rule { (2 + 2 == 5) or (3 > 1 and 1 == 1) }
+main = rule { allow }

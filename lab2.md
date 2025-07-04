@@ -184,6 +184,16 @@ Organizing your policy files with clear structure and comments makes them easier
    ```
    You should see `PASS`.
 
+**Explanation of the syntax:**
+- Each line like `allow = rule { true }` defines a rule. A rule is a logical test that returns either true or false.
+- The `main` rule is special: Sentinel always evaluates the `main` rule to decide if the policy passes (`true`) or fails (`false`).
+- You can combine rules using logical operators:
+  - `and` means both sides must be true for the result to be true.
+  - `not` means the result is true if the rule inside is false.
+- For example, `main = rule { allow and not deny }` means the policy will pass only if `allow` is true and `deny` is false.
+
+**In the next steps, you will modify the policy to add a new rule and change the logic in the main rule. This will show you how the outcome of the policy changes based on the rules you define.**
+
 **Now try the following:**
 - Edit `structure.sentinel` and add another rule:
   ```hcl
@@ -200,21 +210,17 @@ Organizing your policy files with clear structure and comments makes them easier
   ```
   Run the policy and observe the result (`FAIL`).
 
-**Challenge:**
-Write a policy in `structure.sentinel` with three rules: `allow`, `deny`, and `maybe`. Set them as follows:
-```hcl
-allow = rule { true }
-deny = rule { false }
-maybe = rule { false }
-main = rule { allow and not deny and not maybe }
-```
-Run the policy and confirm it passes. Then, try changing one of the rules to `true` and see how it affects the result.
-
 ---
 
 ## Part 4: Advanced Syntax Exploration
 
 ### 6. Use Nested Expressions
+
+**Why use nested expressions?**
+In real-world Sentinel policies, you often need to enforce complex requirements that can't be captured by a single simple rule. Nested expressions let you combine multiple conditions and logical operators to reflect nuanced business or security policies. For example, you might want to allow an action only if several requirements are met, or if at least one of several exceptions applies. Using nested logic helps you write policies that closely match real organizational rules and compliance needs.
+
+This step helps you practice writing more complex, nested logic in your rules.
+
 1. Edit `structure.sentinel` to:
    ```hcl
    allow = rule { (2 + 2 == 4) and (3 > 1) }

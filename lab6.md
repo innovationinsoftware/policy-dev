@@ -43,13 +43,15 @@ We'll write a policy that only allows actions before noon, using the `time` impo
    import "time"
    main = rule { time.now.hour < 12 }
    ```
+   **Explanation:**
+   This policy will return `true` if the current (mocked) hour is less than 12, and `false` otherwise. We'll use this to test different time scenarios.
 
 ---
 
 ### 2. Create the Test Directory and Test Cases
 
 **What we're doing:**
-We'll create a directory for our policy's tests and add individual test case files.
+We'll create a directory for our policy's tests and add individual test case files. Each test will specify a different time and the expected result for `main`.
 
 1. Create the test directory:
    ```bash
@@ -72,6 +74,9 @@ We'll create a directory for our policy's tests and add individual test case fil
      }
    }
    ```
+   **Explanation:**
+   Here, the mocked time is 9:42am. Since 9 < 12, the policy will return `true` for `main`. The test expects `main = true`, so this test will PASS.
+
 3. Create a test case file for 1pm (should pass, expect `main = false`):
    Create `test/time-policy/fail-1pm.hcl`:
    ```hcl
@@ -89,6 +94,9 @@ We'll create a directory for our policy's tests and add individual test case fil
      }
    }
    ```
+   **Explanation:**
+   Here, the mocked time is 1:00pm (13:00). Since 13 >= 12, the policy will return `false` for `main`. The test expects `main = false`, so this test will PASS.
+
 4. Create a test case file for noon (should pass, expect `main = false`):
    Create `test/time-policy/edge-noon.hcl`:
    ```hcl
@@ -106,6 +114,9 @@ We'll create a directory for our policy's tests and add individual test case fil
      }
    }
    ```
+   **Explanation:**
+   Here, the mocked time is exactly noon (12:00). Since 12 is not less than 12, the policy will return `false` for `main`. The test expects `main = false`, so this test will PASS.
+
 5. Create a test case file for midnight (should pass):
    Create `test/time-policy/pass-midnight.hcl`:
    ```hcl
@@ -123,9 +134,13 @@ We'll create a directory for our policy's tests and add individual test case fil
      }
    }
    ```
+   **Explanation:**
+   Here, the mocked time is midnight (0:00). Since 0 < 12, the policy will return `true` for `main`. The test expects `main = true`, so this test will PASS.
 
-**Why this is useful:**
-By writing separate test files for different times, you can be sure your policy behaves as expected for all relevant scenarios, not just the current time.
+**Summary:**
+- Each test file sets a different time and specifies the expected result for `main`.
+- If the policy returns the expected value, the test will PASS.
+- If the policy returns a different value, the test will FAIL.
 
 ---
 
@@ -150,15 +165,27 @@ We'll create a test case that is intentionally incorrect (the expected value doe
        main = false
      }
    }
+   ```
+   **Explanation:**
+   Here, the mocked time is 9:00am. The policy will return `true` for `main` (since 9 < 12), but the test expects `main = false`. This mismatch will cause Sentinel to report this test as FAIL.
+
+2. Run the tests:
+   ```bash
+   sentinel test
+   ```
+   You should see output like:
    ```sentinel
+   FAIL - time-policy.sentinel
      FAIL - test/time-policy/should-fail-9am.hcl
        expected "main" to be false, got: true
    ...
    ```
-   This shows that the test failed because the policy returned `true` for `main`, but you expected `false`.
+   **Explanation:**
+   The test failed because the policy returned `true` for `main`, but the test expected `false`. This is how Sentinel helps you catch logic errors or unexpected behavior.
 
-**Why this is useful:**
-This demonstrates how Sentinel reports a test as FAIL when the policy does not match your expectation. Use this to catch logic errors or unexpected behavior in your policies.
+**Summary:**
+- If the expected value in the test file does not match the policy's output, Sentinel will report a FAIL for that test case.
+- This is useful for verifying that your policy fails when it should, and for catching mistakes in your logic or test setup.
 
 ---
 
@@ -182,126 +209,7 @@ This lets you quickly verify your policy logic for a variety of scenarios, and t
 
 ---
 
-## Part 5: Simulating Policy Inputs (with the Time Import)
-
-You can use the `sentinel apply` command with different mock data in `sentinel.hcl` to simulate how your policy behaves at different times. This is useful for ad-hoc testing and for simulating edge cases.
-
-### 5. Simulate Different Times
-
-**What we're doing:**
-We'll change the mock time in `sentinel.hcl` and see how the policy responds.
-
-1. Edit or create `sentinel.hcl`:
-   ```hcl
-   mock "time" {
-     data = {
-       now = {
-         hour = 10
-         minute = 30
-       }
-     }
-   }
-   ```
-2. Run:
-   ```bash
-   sentinel apply time-policy.sentinel
-   ```
-   You should see `PASS` (since 10 < 12).
-3. Change the hour to 14 and rerun. You should see `FAIL`.
-
-**Why this is useful:**
-This lets you quickly test your policy for any time of day, without waiting for the real clock to change.
-
----
-
-## Part 6: Advanced Testing Features (with the Time Import)
-
-Sentinel's testing framework supports more advanced features, such as custom messages, negative tests, and test file organization.
-
-### 6. Add More Test Cases and Edge Cases
-
-**What we're doing:**
-We'll add more test case files to cover edge times and clarify the expected outcome.
-
-1. Add a test case for 11:59am (should pass):
-   Create `test/time-policy/pass-1159am.hcl`:
-   ```hcl
-   mock "time" {
-     data = {
-       now = {
-         hour = 11
-         minute = 59
-       }
-     }
-   }
-   test {
-     rules = {
-       main = true
-     }
-   }
-   ```
-2. Add a test case for 12:01pm (should fail):
-   Create `test/time-policy/fail-1201pm.hcl`:
-   ```hcl
-   mock "time" {
-     data = {
-       now = {
-         hour = 12
-         minute = 1
-       }
-     }
-   }
-   test {
-     rules = {
-       main = false
-     }
-   }
-   ```
-3. Rerun the tests and observe the output messages.
-
-**Why this is useful:**
-Testing edge cases (like just before and after noon) ensures your policy logic is robust and behaves as intended in all scenarios.
-
----
-
-## Part 7: Organizing and Running Multiple Policies
-
-As your policy library grows, you may want to organize tests for different policies or scenarios. Repeat the above structure for each policy you want to test.
-
-**What we're doing:**
-We'll show how to organize and run multiple test files for different time-based policies.
-
-1. For each policy (e.g., `minute-policy.sentinel`), create a corresponding test directory (e.g., `test/minute-policy/`) and add `.hcl` test case files there.
-2. Run all tests in the directory:
-   ```bash
-   sentinel test
-   ```
-
-**Why this is useful:**
-Keeping your tests organized makes it easier to maintain and expand your policy codebase as it grows.
-
----
-
-## Part 8: Test Coverage and Best Practices
-
-Testing is most effective when you cover a wide range of scenarios:
-- Valid and invalid times
-- Edge cases (just before/after a threshold)
-- Typical real-world times
-
-**Challenge:**
-Write a comprehensive set of test files for a time-based policy that covers:
-- All valid cases
-- All expected failure cases
-- At least one edge case
-
-**Reflection:**
-- How confident are you that your policy will behave correctly in production?
-- What additional tests could you add to increase your confidence?
-
----
-
-## Part 9: Debugging and Test Output
+## Part 5: Debugging and Test Output
 
 Sentinel provides detailed output for failed tests, including which rule failed and why. You can use the `-verbose` flag for more information.
 

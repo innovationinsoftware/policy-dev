@@ -5,6 +5,18 @@ In this lab, you'll get hands-on experience with the HashiCorp Sentinel CLI and 
 
 ---
 
+## Lab Setup
+
+Create and move into a working directory for this lab:
+
+```bash
+mkdir lab1
+cd lab1
+```
+All commands and files in this lab should be created and run inside the `lab1` directory.
+
+---
+
 ## Part 1: Getting Started with the Sentinel CLI
 
 Before you can use Sentinel to enforce policies, you need to make sure the CLI is installed and accessible. This section will help you confirm your setup and introduce you to the available commands.
@@ -23,13 +35,6 @@ sentinel --help
 ```
 Take a moment to look through the output. Notice the available subcommands and options. This is your reference for exploring Sentinel's capabilities.
 
-### 3. List Available Imports and Functions
-Sentinel comes with a set of built-in imports and functions. To see what's available, run:
-```bash
-sentinel list
-```
-This will display a list of imports and functions you can use in your policies.
-
 ---
 
 ## Part 2: Exploring Sentinel Language Basics
@@ -38,7 +43,7 @@ Now that you've seen the CLI, let's dive into the language itself. Sentinel poli
 
 ### 4. Create and Run a Minimal Policy
 A Sentinel policy is just a file with a `.sentinel` extension. Let's create the simplest possible policy:
-1. Create a file named `hello.sentinel` with this content:
+1. In your `lab1` directory, create a new file called `hello.sentinel` with this content:
    ```hcl
    main = rule { true }
    ```

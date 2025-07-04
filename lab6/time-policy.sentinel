@@ -1,0 +1,2 @@
+import "time"
+main = rule { time.now.hour < 12 }

@@ -24,18 +24,38 @@ Let's see how you can define and use more than one rule in a policy, using a mor
    ```
 You should see `PASS`. The `main` rule allows access if the user is an admin or another condition is met.
 
-**Now try the following to see how changing rules affects the policy outcome:**
+**Now try the following to see both PASS and FAIL outcomes:**
+
 - Edit `rules.sentinel` and change `is_admin` to check for a different role:
   ```hcl
   is_admin = rule { "user" in ["admin"] }
+  has_access = rule { is_admin or (5 < 10) }
+  main = rule { has_access }
   ```
-  Run the policy and observe the result (`PASS` or `FAIL`).
-- Add a third rule, e.g., `quota_ok = rule { 100 < 200 }`, and use it in `main`:
+  Run the policy. You should see `PASS` (because `5 < 10` is true).
+
+- Now, change `has_access` so both conditions are false:
   ```hcl
-  quota_ok = rule { 100 < 200 }
+  is_admin = rule { "user" in ["admin"] }
+  has_access = rule { is_admin or (5 > 10) }
+  main = rule { has_access }
+  ```
+  Run the policy. You should see `FAIL`.
+
+- Add a third rule, `quota_ok`, and use it in `main`:
+  ```hcl
+  is_admin = rule { "admin" in ["admin", "user", "guest"] }
+  has_access = rule { is_admin or (5 < 10) }
+  quota_ok = rule { 100 > 200 }
   main = rule { has_access and quota_ok }
   ```
-  Run the policy and see how the outcome changes.
+  Run the policy. You should see `FAIL` (because `quota_ok` is false).
+
+- Change `quota_ok` to be true:
+  ```hcl
+  quota_ok = rule { 100 < 200 }
+  ```
+  Run the policy. You should see `PASS`.
 
 **Explanation:**
 This shows how you can model real access control or resource checks with multiple rules.

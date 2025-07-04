@@ -5,6 +5,18 @@ In this lab, you'll learn how to write more complex Sentinel policies using cond
 
 ---
 
+## Lab Setup
+
+Create and move into a working directory for this lab:
+
+```bash
+mkdir lab8
+cd lab8
+```
+All commands and files in this lab should be created and run inside the `lab8` directory.
+
+---
+
 ## Part 1: Conditional Statements
 
 Conditional statements let you write policies that behave differently based on input values. Sentinel supports `if`, `else if`, and `else` just like many programming languages.

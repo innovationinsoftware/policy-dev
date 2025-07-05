@@ -141,10 +141,11 @@ main = rule { length(matched_foo) == 1 && matched_foo["a"] == "foo" }
 l = [1, 2]
 r = map l as v { v % 2 }
 
-main = rule { r == [false, true] }
+# This rule will FAIL because r == [false, true], not [true, true]
+main = rule { r == [true, true] }
 ```
 - Run: `sentinel apply map-list.sentinel`
-- This will PASS because the map returns the result of `v % 2` for each element.
+- This will FAIL because the rule expects [true, true] but gets [false, true].
 
 ### d. Mapping a Map
 
@@ -153,10 +154,11 @@ main = rule { r == [false, true] }
 m = { "a": "foo", "b": "bar" }
 r = map m as k, v { v }
 
-main = rule { length(r) == 2 && "foo" in r && "bar" in r }
+# This rule will FAIL because r contains "foo" and "bar", but we check for "baz"
+main = rule { length(r) == 2 && "baz" in r }
 ```
 - Run: `sentinel apply map-map.sentinel`
-- This will PASS because the map returns the values of the map as a list.
+- This will FAIL because "baz" is not in the list of values.
 
 **Explanation:**
 - Each example demonstrates a different aspect of collection operations in Sentinel, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/collection-operations).

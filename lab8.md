@@ -106,78 +106,68 @@ This example demonstrates how to use a `for` loop to sum the values in a list.
 
 ---
 
-### 2. Working with Maps (Direct from Official Docs)
+### 2. Boolean Expressions in Sentinel (Based on Official Documentation)
 
-This example demonstrates all the core map operations as shown in the [official Sentinel documentation on maps](https://developer.hashicorp.com/sentinel/docs/language/maps): creating a map, accessing elements, adding/modifying elements, deleting elements, using `keys()` and `values()`, and comparing maps.
+Sentinel supports a rich set of boolean expressions for policy logic. Here are several focused examples, each as a separate policy file:
 
-1. Create a policy file named `map-examples.sentinel`:
-   ```sentinel
-   // Create maps
-   empty_map = {}
-   single_map = { "key": "value" }
-   multi_map = {
-     "key": "value",
-     42: true,
-   }
+#### a. Basic Boolean Logic
 
-   // Accessing elements
-   map = { "key": "value", 42: true, }
-   val1 = map["key"]    // "value"
-   val2 = map[42]        // true
-   val3 = map[0]         // undefined
+**boolexpr-basic.sentinel**
+```sentinel
+main = rule {
+  (4 + 5 * 2 == 14) and (10 > 2) or (false)
+}
+```
+- Run: `sentinel apply boolexpr-basic.sentinel`
+- This will PASS because the expression evaluates to true.
 
-   // Modifying or adding elements
-   map2 = { "key": "value" }
-   map2[42] = true   // Add a new key/value
-   map2["key"] = 12 // Modify the value of "key"
+#### b. Set Operators
 
-   // Deleting elements
-   map3 = { "key": "value" }
-   delete(map3, "key")    // map3 is now empty
-   delete(map3, "other")  // no effect for non-existent key
+**boolexpr-set.sentinel**
+```sentinel
+main = rule {
+  [1, 2, 3] contains 2 and {"a": 1, "b": 2} contains "a" and 2 in [1, 2, 3]
+}
+```
+- Run: `sentinel apply boolexpr-set.sentinel`
+- This will PASS because the set operators all return true.
 
-   // Keys and values
-   data = { "a": 2, "b": 3 }
-   data_keys = keys(data)       // e.g. ["b", "a"]
-   data_values = values(data)   // e.g. [2, 3]
+#### c. Any/All Expressions
 
-   // Map comparison
-   map_a = {"foo": "bar"}
-   map_b = {"foo": "bar"}
-   map_c = {"baz": "bar"}
-   map_d = {"foo": "baz"}
-   map_e = {"foo": "bar", "baz": "qux"}
-   map_f = {1: "a"}
-   map_g = {1.0: "a"}
-   map_h = {"m": {"a": "b"}, "l": ["a"]}
-   map_i = {"l": ["a"], "m": {"a": "b"}}
+**boolexpr-anyall.sentinel**
+```sentinel
+main = rule {
+  all [1, 2, 3] as n { n > 0 } and any [1, 2, 3] as n { n == 2 }
+}
+```
+- Run: `sentinel apply boolexpr-anyall.sentinel`
+- This will PASS because all numbers are > 0 and at least one is 2.
 
-   main = rule {
-     val1 == "value" &&
-     val2 == true &&
-     val3 is undefined &&
-     map2[42] == true &&
-     map2["key"] == 12 &&
-     length(map3) == 0 &&
-     length(data_keys) == 2 &&
-     length(data_values) == 2 &&
-     map_a is map_b &&
-     !(map_a is map_c) &&
-     !(map_a is map_d) &&
-     !(map_a is map_e) &&
-     map_f is map_g &&
-     map_h is map_i
-   }
-   ```
-2. Run:
-   ```bash
-   sentinel apply map-examples.sentinel
-   ```
-   You should see `PASS` if all map operations and comparisons are correct. Try modifying the maps or the rule to experiment.
+#### d. Emptiness Comparison
+
+**boolexpr-emptiness.sentinel**
+```sentinel
+main = rule {
+  [] is empty and [1] is not empty and {} is empty
+}
+```
+- Run: `sentinel apply boolexpr-emptiness.sentinel`
+- This will PASS because the emptiness checks are correct.
+
+#### e. Defined Comparison
+
+**boolexpr-defined.sentinel**
+```sentinel
+main = rule {
+  4 is defined and undefined is not defined and [] is defined
+}
+```
+- Run: `sentinel apply boolexpr-defined.sentinel`
+- This will PASS because the defined checks are correct.
 
 **Explanation:**
-- This example covers all the core map operations: creation, access, modification, deletion, keys/values, and comparison.
-- The rule checks the results of each operation, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/maps).
+- Each example demonstrates a different aspect of boolean expressions in Sentinel, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/boolexpr).
+- All are minimal, focused, and runnable in the open-source CLI.
 
 ---
 

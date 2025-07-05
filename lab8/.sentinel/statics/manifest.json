@@ -1,0 +1,10 @@
+{
+	"records": [
+		{
+			"key": "envdata",
+			"source": "./envdata.json",
+			"sourceSum": "",
+			"dest": "C:/Users/Admin/Documents/software/policy-dev/lab8/envdata.json"
+		}
+	]
+}

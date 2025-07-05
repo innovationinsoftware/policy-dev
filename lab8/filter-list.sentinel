@@ -1,0 +1,4 @@
+l = [1, 1, 2, 3, 5, 8]
+evens = filter l as v { v % 2 is 0 }
+
+main = rule { evens == [2, 8] }

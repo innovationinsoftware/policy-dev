@@ -1,0 +1,4 @@
+m = { "a": "foo", "b": "bar" }
+matched_foo = filter m as _, v { v is "foo" }
+
+main = rule { length(matched_foo) == 1 and matched_foo["a"] == "foo" }

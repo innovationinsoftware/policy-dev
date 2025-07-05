@@ -1,0 +1,5 @@
+m = { "a": "foo", "b": "bar" }
+r = map m as k, v { v }
+
+# This rule will FAIL because r contains "foo" and "bar", but we check for "baz"
+main = rule { length(r) == 2 and "baz" in r }

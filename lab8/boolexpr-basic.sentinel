@@ -1,0 +1,3 @@
+main = rule {
+  (4 + 5 * 2 == 14) and (10 > 2) or (false)
+}

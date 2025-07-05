@@ -1,0 +1,3 @@
+main = rule {
+  [] is empty and [1] is not empty and {} is empty
+}

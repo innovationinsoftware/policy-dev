@@ -106,152 +106,60 @@ This example demonstrates how to use a `for` loop to sum the values in a list.
 
 ---
 
-### 2. Boolean Expressions in Sentinel (Based on Official Documentation)
+## Part 3: Collection Operations (Based on Official Documentation)
 
-Sentinel supports a rich set of boolean expressions for policy logic. Here are several focused examples, each as a separate policy file:
+Sentinel supports collection operations such as `filter` and `map` for lists and maps ([see docs](https://developer.hashicorp.com/sentinel/docs/language/collection-operations)). Here are several focused examples, each as a separate policy file:
 
-#### a. Basic Boolean Logic
+### a. Filtering a List
 
-**boolexpr-basic.sentinel**
+**filter-list.sentinel**
 ```sentinel
-main = rule {
-  (4 + 5 * 2 == 14) and (10 > 2) or (false)
-}
+l = [1, 1, 2, 3, 5, 8]
+evens = filter l as v { v % 2 is 0 }
+
+main = rule { evens == [2, 8] }
 ```
-- Run: `sentinel apply boolexpr-basic.sentinel`
-- This will PASS because the expression evaluates to true.
+- Run: `sentinel apply filter-list.sentinel`
+- This will PASS because the filter returns only even numbers.
 
-#### b. Set Operators
+### b. Filtering a Map
 
-**boolexpr-set.sentinel**
+**filter-map.sentinel**
 ```sentinel
-main = rule {
-  [1, 2, 3] contains 2 and {"a": 1, "b": 2} contains "a" and 2 in [1, 2, 3]
-}
+m = { "a": "foo", "b": "bar" }
+matched_foo = filter m as _, v { v is "foo" }
+
+main = rule { length(matched_foo) == 1 && matched_foo["a"] == "foo" }
 ```
-- Run: `sentinel apply boolexpr-set.sentinel`
-- This will PASS because the set operators all return true.
+- Run: `sentinel apply filter-map.sentinel`
+- This will PASS because only the key/value pair with value "foo" is returned.
 
-#### c. Any/All Expressions
+### c. Mapping a List
 
-**boolexpr-anyall.sentinel**
+**map-list.sentinel**
 ```sentinel
-main = rule {
-  all [1, 2, 3] as n { n > 0 } and any [1, 2, 3] as n { n == 2 }
-}
+l = [1, 2]
+r = map l as v { v % 2 }
+
+main = rule { r == [false, true] }
 ```
-- Run: `sentinel apply boolexpr-anyall.sentinel`
-- This will PASS because all numbers are > 0 and at least one is 2.
+- Run: `sentinel apply map-list.sentinel`
+- This will PASS because the map returns the result of `v % 2` for each element.
 
-#### d. Emptiness Comparison
+### d. Mapping a Map
 
-**boolexpr-emptiness.sentinel**
+**map-map.sentinel**
 ```sentinel
-main = rule {
-  [] is empty and [1] is not empty and {} is empty
-}
-```
-- Run: `sentinel apply boolexpr-emptiness.sentinel`
-- This will PASS because the emptiness checks are correct.
+m = { "a": "foo", "b": "bar" }
+r = map m as k, v { v }
 
-#### e. Defined Comparison
-
-**boolexpr-defined.sentinel**
-```sentinel
-main = rule {
-  4 is defined and undefined is not defined and [] is defined
-}
+main = rule { length(r) == 2 && "foo" in r && "bar" in r }
 ```
-- Run: `sentinel apply boolexpr-defined.sentinel`
-- This will PASS because the defined checks are correct.
+- Run: `sentinel apply map-map.sentinel`
+- This will PASS because the map returns the values of the map as a list.
 
 **Explanation:**
-- Each example demonstrates a different aspect of boolean expressions in Sentinel, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/boolexpr).
+- Each example demonstrates a different aspect of collection operations in Sentinel, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/collection-operations).
 - All are minimal, focused, and runnable in the open-source CLI.
 
----
-
-### 3. Summing Values from a Map
-
-This example demonstrates how to use a `for` loop to sum the values in a map.
-
-1. Create a policy file named `sum-map.sentinel`:
-   ```sentinel
-   mymap = { "a": 1, "b": 2 }
-   total = 0
-   for mymap as k, v {
-     total += v
-   }
-
-   main = rule { total == 3 }
-   ```
-2. Run:
-   ```bash
-   sentinel apply sum-map.sentinel
-   ```
-   You should see `PASS` because the sum of the values is 3. Try changing the map or the rule to experiment.
-
-**Explanation:**
-- The `for` loop iterates over the map, adding each value to `total`.
-- The rule checks if the total is as expected.
-
----
-
-## Part 3: Advanced Iteration and Conditionals
-
-### 4. Nested Conditionals and Loops
-
-Combine conditionals and iteration for more advanced logic.
-
-1. Edit `vms.json` to provide a mix of prod and non-prod VMs, some missing tags:
-   ```json
-   [
-     { "name": "vm1", "tags": ["owner", "prod", "environment"] },
-     { "name": "vm2", "tags": ["owner", "prod"] },
-     { "name": "vm3", "tags": ["dev"] }
-   ]
-   ```
-2. Create a policy file named `complex-policy.sentinel`:
-   ```hcl
-   import "static" "vms"
-   main = rule {
-     all([
-       foreach vm in vms :
-         if "prod" in vm.tags {
-           "owner" in vm.tags and "environment" in vm.tags
-         } else {
-           true
-         }
-     ])
-   }
-   ```
-3. Edit `sentinel.hcl` to:
-   ```hcl
-   import "static" "vms" {
-     source = "./vms.json"
-     format = "json"
-   }
-   ```
-4. Run:
-   ```bash
-   sentinel apply complex-policy.sentinel
-   ```
-   Observe which VMs are non-compliant by adjusting the logic or adding print statements.
-
-**Try this:**
-- Add a print statement to show which VMs are non-compliant.
-- Refactor the logic into a function for reuse.
-
-**Challenge:**
-Write a policy that enforces different tag requirements for prod and dev VMs using nested conditionals and iteration.
-
----
-
-## Lab Completion
-
-In this lab, you:
-- Used conditional statements to write flexible policies
-- Used loops and iteration to evaluate collections of resources
-- Practiced advanced logic with nested conditionals and iteration
-
-You now have the skills to write complex, real-world Sentinel policies! 
+--- 

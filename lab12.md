@@ -69,7 +69,6 @@ terraform apply -var="instance_type=t2.small"
 - **Reflection:** How does using per-run variables and the HCP Terraform UI improve the safety and auditability of infrastructure changes?
 - **Challenge:**
   - Try making a different change (such as updating another variable or resource) and observe how the run history and state files are updated.
-  - Experiment with locking the workspace before a run and see how it affects the ability to trigger new runs.
 
 ---
 
@@ -125,19 +124,33 @@ git push
 #### 3. Enable VCS Integration in HCP Terraform
 
 - In the HCP Terraform UI, go to your workspace's **Settings** and select **Version Control**.
-- Click **Connect to version control** and choose your VCS provider (e.g., GitHub.com).
+- Click **Connect to version control**, select **Version Control Workflow** and choose your VCS provider (e.g., GitHub App)
 - Authorize HCP Terraform to access your repository and select the repository you created.
 - Confirm the connection and enable automatic speculative plans, which preview infrastructure changes for every pull request.
 
 ---
 
-#### 4. Trigger Speculative Plans and Apply Changes
+#### 4. Make an Explicit Change to Trigger a Plan
 
-- Any push to the main branch will automatically trigger a Terraform run in your workspace.
-- When you open a pull request, HCP Terraform will generate a speculative plan—a non-destructive preview of the changes that would be made if the pull request is merged.
-- Review the speculative plan in the pull request details before merging.
-- Merge the pull request to apply the changes. HCP Terraform will pick up the change and start a new run.
-- Review the run details and confirm & apply the run in the HCP Terraform UI.
+To test your HCP Terraform integration, make a simple, valid change to your configuration. For this lab, you will update the value of the `environment` tag in all tag blocks in `main.tf` from `"dev"` to `"development"`.
+
+1. Open `main.tf` in your code editor.
+2. Find all occurrences of:
+   ```hcl
+   environment = "dev"
+   ```
+3. Change them to:
+   ```hcl
+   environment = "development"
+   ```
+4. Save the file.
+5. Commit and push your change to the main branch:
+   ```sh
+   git add main.tf
+   git commit -m "Change environment tag from dev to development"
+   git push
+   ```
+6. This push will automatically trigger a Terraform run in your HCP Terraform workspace. You can monitor the run and its results in the HCP T
 
 ---
 

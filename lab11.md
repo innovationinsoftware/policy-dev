@@ -250,3 +250,18 @@ This centralized visibility makes it easy to monitor, audit, and share informati
 - You viewed run details, managed resources, and accessed outputs in the workspace UI.
 
 Your workspace is now fully configured and managing infrastructure with HCP Terraform.
+
+#### 4. Make an Explicit Change and Push to Trigger a Plan
+
+To test the integration and trigger a Terraform run in HCP Terraform, make a simple change to your configuration. For example, edit the `variables.tf` file and change the default value of a variable, or update a tag in your `main.tf` file.
+
+1. Open a file such as `variables.tf` or `main.tf` in your code editor.
+2. Make a small, valid change (e.g., update a variable description or a tag value).
+3. Save the file.
+4. Commit and push your change to the main branch of your fork:
+   ```sh
+   git add .
+   git commit -m "Test: update variable description to trigger plan"
+   git push origin main
+   ```
+5. This push will automatically trigger a Terraform run in your HCP Terraform workspace. You can monitor the run and its results in the HCP Terraform UI.

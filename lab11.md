@@ -17,16 +17,16 @@ HCP Terraform runs Terraform operations and stores state remotely, providing a s
 
 ### Hands-On Tasks
 
-#### 0. Clone the Example Terraform Configuration
+#### 0. Fork and Clone the Example Terraform Configuration
 
-For this lab, you will use a sample Terraform configuration that demonstrates variable usage. Clone the repository to your local machine and change into the directory:
-
-```sh
-git clone https://github.com/jruels/learn-terraform-variables.git
-cd learn-terraform-variables
-```
-
-All subsequent commands in this lab should be run from within the `learn-terraform-variables` directory.
+1. Go to [https://github.com/jruels/learn-terraform-variables](https://github.com/jruels/learn-terraform-variables) in your web browser.
+2. Click the **Fork** button in the top right corner and fork the repository to your own GitHub account.
+3. Once forked, clone your forked repository to your local machine:
+   ```sh
+   git clone https://github.com/<your-username>/learn-terraform-variables.git
+   cd learn-terraform-variables
+   ```
+4. All subsequent commands in this lab should be run from within the `learn-terraform-variables` directory.
 
 #### 1. Prerequisites
 
@@ -164,11 +164,9 @@ Your workspace is now configured with the necessary AWS credentials, which will 
 
 ---
 
-#### Reflection & Challenge
+#### Reflection
 
 - **Reflection:** How does using workspaces and variable sets in HCP Terraform improve collaboration and infrastructure management compared to local-only workflows?
-- **Challenge:**
-  - Try creating a second workspace for a different environment (e.g., staging or dev) and observe how state and variables are isolated.
 
 ---
 

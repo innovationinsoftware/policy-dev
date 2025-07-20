@@ -81,21 +81,9 @@ The VCS-driven workflow in HCP Terraform enables teams to manage infrastructure 
 
 ---
 
-#### 1. Create and Connect a GitHub Repository
+#### 1. Update Configuration for VCS Workflow
 
-- Create a new repository in your GitHub account to store your Terraform configuration files.
-- Copy the remote endpoint URL for your new repository.
-- In your local project directory, update the remote endpoint URL:
-
-```sh
-git remote set-url origin YOUR_REMOTE
-```
-
----
-
-#### 2. Update Configuration for VCS Workflow
-
-- Open your `terraform.tf` file and comment out the `cloud` block, as it is not required for the VCS-driven workflow.
+- Open your `main.tf` file and comment out the `cloud` block, as it is not required for the VCS-driven workflow.
 
 Example:
 

@@ -146,7 +146,7 @@ Terraform will initialize the working directory, download required provider plug
 If you are not using a global variable set, assign the appropriate variable set (such as AWS credentials) to your new workspace in the HCP Terraform UI:
 - Navigate to your workspace in the UI.
 - Go to the **Variables** page.
-- Under **Variable sets**, click **Apply variable set** and select the relevant set.
+- Under **Variable sets**, click **Apply variable set** and select 'AWS Credentials'.
 
 This ensures your workspace has access to the necessary credentials and configuration values for provisioning resources.
 
@@ -165,7 +165,6 @@ This ensures your workspace has access to the necessary credentials and configur
 - **Reflection:** How does using workspaces and variable sets in HCP Terraform improve collaboration and infrastructure management compared to local-only workflows?
 - **Challenge:**
   - Try creating a second workspace for a different environment (e.g., staging or dev) and observe how state and variables are isolated.
-  - Experiment with assigning different variable sets to different workspaces and note the impact on your Terraform runs.
 
 ---
 
@@ -178,9 +177,44 @@ HCP Terraform allows you to define input variables directly in the workspace UI,
 - In the **Workspace variables** section, click **+ Add variable**.
 - Select the **Terraform variable** radio button.
 - Set the key to `instance_type` and the value to `t2.micro`, then click **Add variable**.
-- Click **+ Add variable** again, set the key to `instance_name` and the value to `Provisioned by Terraform`, then click **Add variable**.
+- Click **+ Add variable** again, set the key to `instance_count` and the value to `3`, then click **Add variable**.
 
 Your workspace is now configured with these input variables, which will be used in your Terraform configuration.
+
+---
+
+#### Set Instance Type and Count as Variables
+
+To make your configuration more flexible, you should set the EC2 instance type and count as variables. This allows you to customize these values from the HCP Terraform UI or via variable sets.
+
+- Edit your `main.tf` file so that the `module "ec2_instances"` block references variables for `instance_type` and `instance_count`:
+
+```hcl
+module "ec2_instances" {
+  source = "./modules/aws-instance"
+
+  instance_count = var.instance_count
+  instance_type  = var.instance_type
+}
+```
+
+<!-- - Next, create variable definitions in your `variables.tf` file:
+
+```hcl
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "instance_count" {
+  description = "Number of EC2 instances to create"
+  type        = number
+  default     = 2
+} -->
+```
+
+By defining these variables, you can easily adjust the number and type of EC2 instances from the HCP Terraform UI or through variable sets, without modifying your code.
 
 ---
 

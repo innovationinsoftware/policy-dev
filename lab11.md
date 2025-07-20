@@ -17,6 +17,17 @@ HCP Terraform runs Terraform operations and stores state remotely, providing a s
 
 ### Hands-On Tasks
 
+#### 0. Clone the Example Terraform Configuration
+
+For this lab, you will use a sample Terraform configuration that demonstrates variable usage. Clone the repository to your local machine and change into the directory:
+
+```sh
+git clone https://github.com/jruels/learn-terraform-variables.git
+cd learn-terraform-variables
+```
+
+All subsequent commands in this lab should be run from within the `learn-terraform-variables` directory.
+
 #### 1. Prerequisites
 
 - Terraform CLI (version 1.1.0+) installed locally
@@ -78,7 +89,6 @@ You are now authenticated and ready to perform remote operations with HCP Terraf
 
 - **Reflection:** Why is it important to use API tokens and secure authentication when working with cloud-based infrastructure tools?
 - **Challenge:**
-  - Try running `terraform plan` or `terraform apply` in a directory with a valid HCP Terraform configuration to confirm your authentication works.
   - Explore the `~/.terraform.d/credentials.tfrc.json` file and consider how you would rotate or revoke tokens if needed.
 
 ---
@@ -97,7 +107,7 @@ Workspaces in HCP Terraform are used to organize and manage collections of infra
 
 #### 1. Update Your Configuration with a Cloud Block
 
-Edit your `terraform.tf` file to include a `cloud` block specifying your HCP Terraform organization and the desired workspace name. This tells Terraform where to create and manage your workspace.
+Edit your `main.tf` file to include a `cloud` block specifying your HCP Terraform organization and the desired workspace name. This tells Terraform where to create and manage your workspace.
 
 Example:
 
@@ -112,10 +122,8 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.31.0"
     }
   }
-  required_version = ">= 1.2"
 }
 ```
 

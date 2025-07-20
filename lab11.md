@@ -61,7 +61,7 @@ Token for app.terraform.io:
 Terraform will store the token in plain text in the following file for use by subsequent commands:
 
 ```
-~/.terraform.d/credentials.tfrc.json
+C:\Users\<username>\AppData\Roaming\terraform.d\credentials.tfrc.json
 ```
 
 #### 5. Verify Authentication
@@ -89,7 +89,7 @@ You are now authenticated and ready to perform remote operations with HCP Terraf
 
 - **Reflection:** Why is it important to use API tokens and secure authentication when working with cloud-based infrastructure tools?
 - **Challenge:**
-  - Explore the `~/.terraform.d/credentials.tfrc.json` file and consider how you would rotate or revoke tokens if needed.
+  - Explore the `C:\Users\<username>\AppData\Roaming\terraform.d\credentials.tfrc.json` file and consider how you would rotate or revoke tokens if needed.
 
 ---
 

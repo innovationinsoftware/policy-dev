@@ -198,20 +198,18 @@ module "ec2_instances" {
 }
 ```
 
-<!-- - Next, create variable definitions in your `variables.tf` file:
+- Next, create variable definitions in your `variables.tf` file:
 
 ```hcl
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t2.micro"
 }
 
 variable "instance_count" {
   description = "Number of EC2 instances to create"
   type        = number
-  default     = 2
-} -->
+}
 ```
 
 By defining these variables, you can easily adjust the number and type of EC2 instances from the HCP Terraform UI or through variable sets, without modifying your code.

@@ -37,22 +37,7 @@ policy "sg-no-ssh-from-anywhere" {
 ```hcl
 policy "ebs-encrypted" {
   source = "./policies/ebs/ebs-encrypted.sentinel"
-  enforcement_level = "soft-mandatory"
-}
-```
-
-#### 3. Tagging Policies
-- Ensure all resources have required tags (e.g., owner, environment, cost center)
-- Enforce tag value formats or presence
-
-**Example:**
-```hcl
-policy "require-resource-tags" {
-  source = "./policies/tags/require-resource-tags.sentinel"
-  enforcement_level = "advisory"
-  params = {
-    required_tags = ["Owner", "Environment", "CostCenter"]
-  }
+  enforcement_level = "hard-mandatory"
 }
 ```
 
@@ -70,32 +55,146 @@ cd policy-library-CIS-Policy-Set-for-AWS-Terraform
 ```
 
 #### 2. Attach the Policy Set to Your HCP Terraform Organization
-- In HCP Terraform, go to **Policy Sets**
-- Click **Connect a new policy set** and select **VCS**
-- Authorize and select your forked repository
-- Choose to apply the policy set to all or specific workspaces
-- Review and adjust the `sentinel.hcl` file to enable/disable policies or change enforcement levels as needed
+- In the HCP Terraform UI, navigate to your organization's **Settings** > **Policy Sets**.
+- Click **Connect a new policy set**.
+- Select **Version Control provider**
+- On the settings page:
+  - Name your policy 'cis-benchmarks-policy'
+  - Select **Sentinel** as the policy framework.
+  - Under **Scope of Policies**, select the workspaces you want this policy set to apply to (i.e. your workspace).
+  - Untick the **Overrides** 'This policy set can be overridden in the event of mandatory failures.' checkbox.
+  - Click **Next**
+- Then select **github app** and select your forked 'learn-terraform-enforce-policies' repository.
+- Click **Next** and finally select **Connect Policy Set**
 
 #### 3. Test Policy Enforcement
-- Trigger a Terraform run in a workspace attached to the policy set
-- Observe policy checks in the run output (e.g., failures for unencrypted resources or missing tags)
-- Try violating a policy (e.g., create an unencrypted S3 bucket) and confirm enforcement
+- Trigger a Terraform run in your workspace.
+- There should be **36 policy checks in total**, including **4 advisories**.
+- Review the run output:
+  - Examine which policies passed and which advisories were issued.
+  - Advisories are informational and do not block the run, but highlight recommended best practices.
+  - Passed policies confirm your configuration is compliant with those checks.
 
 ---
 
 ### Expected Results
 - Sentinel policies from the CIS Policy Set are evaluated on every Terraform run
 - Non-compliant resources are flagged or blocked according to enforcement level
-- Your AWS infrastructure is automatically checked for network security, encryption, and tagging compliance
+- Your AWS infrastructure is automatically checked for compliance
 
 ---
 
 ### Reflection & Challenge
 - **Reflection:** How do pre-written policy libraries accelerate security and compliance in cloud environments?
 - **Challenge:**
-  - Customize a policy (e.g., add a required tag or change enforcement level)
-  - Add a new policy from the library and test its effect on your workspace
+  - Customize a policy (e.g., change enforcement level)
 
 ---
 
-[Source: CIS Policy Set for AWS Terraform](https://github.com/hashicorp/policy-library-CIS-Policy-Set-for-AWS-Terraform)
+#### 4. Intentionally Violate CIS Policies in main.tf
+
+To see the CIS policy set in action, make sure your `main.tf` in the `learn-terraform-variables` repository includes the following:
+
+**a. Security Group Rule Allowing SSH from Anywhere**
+
+Ensure you have a security group module with a rule that allows SSH (port 22) from `0.0.0.0/0`. For example:
+
+```hcl
+module "lb_security_group" {
+  source  = "terraform-aws-modules/security-group/aws//modules/web"
+  version = "3.17.0"
+
+  name        = "lb-sg-project-alpha-dev"
+  description = "Security group for load balancer with HTTP ports open within VPC"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_rules       = ["ssh-tcp"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "SSH open to the world"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
+
+  tags = {
+    project     = "project-alpha",
+    environment = "development"
+  }
+}
+```
+
+**b. Unencrypted EBS Volume**
+
+Add the following resource to create an unencrypted EBS volume:
+
+```hcl
+resource "aws_ebs_volume" "unencrypted" {
+  availability_zone = "us-west-1a"
+  size              = 8
+  encrypted         = false # Intentional violation: unencrypted EBS volume
+}
+```
+
+---
+
+After making these changes, commit and push them to your repository, then trigger a run in HCP Terraform. You should see policy violations flagged in the run output.
+
+**After making these changes and triggering a run, you should now see 6 advisories in the run output. Carefully review the policy check results:**
+- Look for the **encryption enabled policies** (such as EBS, S3, and RDS encryption) which should flag your unencrypted EBS volume.
+- Look for the **security group policies** which should flag your SSH rule open to the world.
+
+#### 5. Remediate the CIS Advisories
+
+Now, update your Terraform configuration to resolve the advisories for SSH open to the world and unencrypted EBS volumes.
+
+**a. Restrict SSH Access to Internal Network**
+
+Update your security group so that SSH (port 22) is only allowed from your internal network (e.g., `10.0.0.0/16`):
+
+```hcl
+module "lb_security_group" {
+  source  = "terraform-aws-modules/security-group/aws//modules/web"
+  version = "3.17.0"
+
+  name        = "lb-sg-project-alpha-dev"
+  description = "Security group for load balancer with HTTP ports open within VPC"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = ["10.0.0.0/16"]
+  ingress_rules       = ["ssh-tcp"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "SSH restricted to internal network"
+      cidr_blocks = "10.0.0.0/16"
+    }
+  ]
+
+  tags = {
+    project     = "project-alpha",
+    environment = "development"
+  }
+}
+```
+
+**b. Enable Encryption on EBS Volume**
+
+Update your EBS volume resource to enable encryption:
+
+```hcl
+resource "aws_ebs_volume" "unencrypted" {
+  availability_zone = "us-west-1a"
+  size              = 8
+  encrypted         = true # Remediated: enable encryption
+}
+```
+
+---
+
+After making these changes, commit and push them to your repository, then trigger a run in HCP Terraform. **There should now be 3 advisories in the run output.**

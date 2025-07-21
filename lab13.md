@@ -170,5 +170,6 @@ Sentinel supports three enforcement levels for policies: `advisory`, `soft-manda
 - **Reflection:** How does enforcing Sentinel policies in HCP Terraform improve compliance and governance for your infrastructure?
 - **Challenge:**
   - Try editing the Sentinel policy to require a different Terraform version, push the change, and observe the effect on your next run.
+  - Allow policy overrides for your workspace again.
 
 ---

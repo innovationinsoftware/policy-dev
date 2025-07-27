@@ -1,7 +1,0 @@
-numbers = [1, 2, 3]
-sum = 0
-for numbers as num {
-  sum += num
-}
-
-main = rule { sum == 6 }

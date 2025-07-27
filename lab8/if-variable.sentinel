@@ -1,8 +1,0 @@
-value = 12
-if value == 18 {
-  result = true
-} else {
-  result = false
-}
-
-main = rule { result }

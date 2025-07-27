@@ -1,5 +1,0 @@
-l = [1, 2]
-r = map l as v { v % 2 }
-
-# This rule will FAIL because r == [false, true], not [true, true]
-main = rule { r == [true, true] }

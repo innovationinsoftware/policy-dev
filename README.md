@@ -14,7 +14,7 @@ Lab 5: [Writing a Policy with the Time Import](labs/sentinel-time-import/)
 
 ### Day 2
 Lab 1: [Terraform Setup](labs/tf-setup/)
-Lab 2: [Terraform First Instance](labs/tf-first-instance/)    
+Lab 2: [Terraform First Instance](labs/tf-first-instance/) 
 Lab 3: [Terraform Variables and Outputs](labs/tf-variables-and-output/)   
 Lab 4: [Terraform Multi-Resource Deployment](labs/tf-more-variables/)   
 Lab 5: [Terraform Even More Variables](labs/tf-even-more-variables/)

@@ -20,7 +20,7 @@
 | Muhammad Nuri           | WSAUTO25-60 | TEKwsAUTO25!               |                                               |
 | Murali Vaddi            | WSAUTO25-61 | TEKwsAUTO25!               |                                               |
 | Venkata Deepthi Gaddam  | WSAUTO25-62 | TEKwsAUTO25!               |                                               |
-| Shouket Fareed          | WSAUTO25-63 | TEKwsAUTO25!               |                                               |
+| Liao	Yunkuan           | WSAUTO25-63 | TEKwsAUTO25!               |                                               |
 | Rajju Balmi             | WSAUTO25-64 | TEKwsAUTO25!               |                                               |
 | Taryn Hains-Karmilovich | WSAUTO25-65 | TEKwsAUTO25!               |                                               |
 | Nam Tran                | WSAUTO25-66 | TEKwsAUTO25!               |                                               |

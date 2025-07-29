@@ -3,8 +3,10 @@
 This site includes the labs for the Policy Developer class.
 
 [Windows VM access](VM_access.md)
+[AWS accounts](https://docs.google.com/spreadsheets/d/18BfLnLeWcqQdujzK9TJdhEzRXunk20yRhPEwwAhMLj4/edit?usp=sharing)
 
 ## Labs
+
 ### Day 1   
 Lab 1: [Sentinel Fundamentals](labs/sentinel-fundamentals/index.md)
 

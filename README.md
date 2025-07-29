@@ -6,27 +6,27 @@ This site includes the labs for the Policy Developer class.
 
 ## Labs
 ### Day 1   
-Lab 1: [Sentinel Fundamentals](labs/sentinel-fundamentals/)
+Lab 1: [Sentinel Fundamentals](labs/sentinel-fundamentals/index.md)
 
-Lab 2: [Sentinel Language Basics](labs/sentinel-language-basics/)
+Lab 2: [Sentinel Language Basics](labs/sentinel-language-basics/index.md)
 
-Lab 3: [Sentinel Rules and Functions](labs/sentinel-rules-and-functions/)
+Lab 3: [Sentinel Rules and Functions](labs/sentinel-rules-and-functions/index.md)
 
-Lab 4: [Sentinel Imports and Modules](labs/sentinel-imports-and-modules/)
+Lab 4: [Sentinel Imports and Modules](labs/sentinel-imports-and-modules/index.md)
 
-Lab 5: [Writing a Policy with the Time Import](labs/sentinel-time-import/)
+Lab 5: [Writing a Policy with the Time Import](labs/sentinel-time-import/index.md)
 
 ### Day 2
 
-Lab 6: [Terraform Setup](labs/tf-setup/)
+Lab 6: [Terraform Setup](labs/tf-setup/index.md)
 
-Lab 7: [Terraform First Instance](labs/tf-first-instance/)
+Lab 7: [Terraform First Instance](labs/tf-first-instance/index.md)
 
-Lab 8: [Terraform Variables and Outputs](labs/tf-variables-and-output/)
+Lab 8: [Terraform Variables and Outputs](labs/tf-variables-and-output/index.md)
 
-Lab 9: [Terraform Multi-Resource Deployment](labs/tf-more-variables/)
+Lab 9: [Terraform Multi-Resource Deployment](labs/tf-more-variables/index.md)
 
-Lab 10: [Terraform Even More Variables](labs/tf-even-more-variables/)
+Lab 10: [Terraform Even More Variables](labs/tf-even-more-variables/index.md)
 
-Lab 11: [Terraform Migrate to Remote State](labs/tf-remote-state/)
+Lab 11: [Terraform Migrate to Remote State](labs/tf-remote-state/index.md)
 

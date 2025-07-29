@@ -1,12 +1,15 @@
 # Setup Student VM's
 
-# Open the lab repo in VS Code
+# Clone the lab repo in VS Code
 
-### Step 1: Open the folder
+### Step 1: Clone the repo
 
 1. Open Visual Studio Code
-2. In Visual Studio Code, click **File** -> **Open Folder** and browse to `C:\Users\TEKstudent\Downloads\repos\tf-dev`
-3. After opening the folder, click the third icon in the left toolbar for source control. Next to **changes**, click the three dots and choose **pull**.
+2. In Visual Studio Code, click **Clone Repository** and paste `https://github.com/innovationinsoftware/policy-dev`
+3. Hit **Enter**, and in the pop-up window, browse to `C:\Users\tekstudent\Downloads\repos`
+4. Click **Select as repository destination**
+5. When prompted to open the cloned repo, choose **Open**.
+6. After opening the folder, click the third icon in the left toolbar for source control. Next to **changes**, click the ellipses (three dots) and choose **pull**.
 
 # Configure AWS credentials
 

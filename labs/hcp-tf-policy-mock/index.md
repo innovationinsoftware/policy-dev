@@ -175,152 +175,33 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
 - You understand how to simulate both passing and failing scenarios before enforcing policies in HCP Terraform.
 
 ---
-
-### Reflection & Challenge
-
-- **Reflection:** How does policy mocking improve the safety and reliability of Sentinel policy enforcement in your organization?
-- **Challenge:** Create a new mock scenario that would cause your policy to fail, and write a test case to assert the expected outcome.
-
 ---
 
-### References
+### 8. Add and Test a Policy for a Specific Security Group Resource
 
-- [HashiCorp Docs: Test Sentinel policies & generate mock data](https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement/test-sentinel) 
-
-#### 7. Add and Test a New Basic Policy: Require Owner Tag
-
-In this section, you'll create and test a new Sentinel policy that enforces all resources must have an "owner" tag.
+In this section, you'll create and test a Sentinel policy that checks that the specific security group resource `module.app_security_group.module.sg.aws_security_group.this_name_prefix[0]` has a description containing the word "web-servers".
 
 1. **Create a new policy file:**
-   - In your policy repo, create `require-owner-tag.sentinel`.
+   - In your policy repo, create `require-specific-sg-description.sentinel`.
 
 2. **Write the policy logic:**
    ```sentinel
    import "tfplan/v2" as tfplan
 
-   # Get all resources in the plan
-   resources = tfplan.resource_changes
-
-   # Check if every resource has an "owner" tag (if tags exist)
-   main = rule {
-     all resources as r {
-       not r.change.after is undefined and
-       ("tags" in r.change.after ? "owner" in r.change.after.tags : true)
-     }
-   }
-   ```
-   - This policy passes if every resource either has no tags (optional) or has an "owner" tag.
-
-3. **Create mock data:**
-   - Copy your existing `mock-tfplan-v2.sentinel` to `mock-tfplan-owner-tag.sentinel`.
-   - Edit the resource(s) in the mock so that in one version, all resources have an `owner` tag (for pass), and in another, at least one resource is missing the `owner` tag (for fail).
-
-4. **Write test cases:**
-   - Create a directory: `test/require-owner-tag/`
-   - Create `pass.hcl`:
-     ```hcl
-     mock "tfplan/v2" {
-       module {
-         source = "../../testdata/mock-tfplan-owner-tag.sentinel"
-       }
-     }
-     mock "tfconfig/v2" {
-       module {
-         source = "../../testdata/mock-tfconfig-v2.sentinel"
-       }
-     }
-     mock "tfstate/v2" {
-       module {
-         source = "../../testdata/mock-tfstate-v2.sentinel"
-       }
-     }
-     mock "tfrun" {
-       module {
-         source = "../../testdata/mock-tfrun.sentinel"
-       }
-     }
-
-     test {
-       rules = {
-         main = true
-       }
-     }
-     ```
-   - Create `fail.hcl` (point to a mock where at least one resource is missing the owner tag, or edit the mock accordingly):
-     ```hcl
-     mock "tfplan/v2" {
-       module {
-         source = "../../testdata/mock-tfplan-owner-tag.sentinel"
-       }
-     }
-     mock "tfconfig/v2" {
-       module {
-         source = "../../testdata/mock-tfconfig-v2.sentinel"
-       }
-     }
-     mock "tfstate/v2" {
-       module {
-         source = "../../testdata/mock-tfstate-v2.sentinel"
-       }
-     }
-     mock "tfrun" {
-       module {
-         source = "../../testdata/mock-tfrun.sentinel"
-       }
-     }
-
-     test {
-       rules = {
-         main = false
-       }
-     }
-     ```
-
-5. **Run your tests:**
-   - From your repo root, run:
-     ```sh
-     sentinel test
-     ```
-   - You should see results for both `pass.hcl` and `fail.hcl` for the new policy.
-
----
-
-### 8. Add and Test a New Basic Policy: Require S3 SSL
-
-In this section, you'll create and test a new Sentinel policy that enforces all S3 bucket policies must require requests to use SSL.
-
-1. **Create a new policy file:**
-   - In your policy repo, create `require-s3-ssl.sentinel`.
-
-2. **Write the policy logic:**
-   ```sentinel
-   import "tfplan/v2" as tfplan
-
-   # Pass if every aws_s3_bucket_policy contains a statement that denies non-SSL requests
    main = rule {
      all tfplan.resource_changes as _, rc {
-       rc.type != "aws_s3_bucket_policy" or (
-         rc.change.after.policy is defined and
-         rc.change.after.policy contains "\"aws:SecureTransport\": false"
-       )
+       rc.address != "module.app_security_group.module.sg.aws_security_group.this_name_prefix[0]" or
+       (rc.change.after.description is defined and rc.change.after.description contains "web-servers")
      }
    }
    ```
-   - This policy passes if every S3 bucket policy denies requests where `"aws:SecureTransport": false`.
+   - This policy only checks the description of the specific resource.
 
-3. **Create mock data:**
-   - Copy your existing `mock-tfplan-v2.sentinel` to `mock-tfplan-s3-ssl.sentinel`.
-   - Edit the mock so that in one version, all S3 bucket policies deny non-SSL requests (for pass), and in another, at least one does not (for fail).
-
-4. **Write test cases:**
-   - Create a directory: `test/require-s3-ssl/`
-   - Create `pass.hcl` and `fail.hcl` similar to your other tests, referencing the new mock files and setting `main = true` or `main = false` as appropriate.
-
-5. **Run your tests:**
+3. **Run your tests:**
    - From your repo root, run:
      ```sh
      sentinel test
      ```
-   - You should see results for both `pass.hcl` and `fail.hcl` for the new policy.
+   - You should see a passing result if your mock data for that resource matches the policy logic.
 
 --- 

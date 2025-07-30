@@ -124,7 +124,7 @@ terraform {
   cloud {
     organization = "your-organization"
     workspaces {
-      name = "your-workspace"
+      name = "policy-dev-{your-initials}"
     }
   }
   required_providers {

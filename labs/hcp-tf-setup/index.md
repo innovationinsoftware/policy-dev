@@ -34,12 +34,12 @@ HCP Terraform runs Terraform operations and stores state remotely, providing a s
    ```
 4. All subsequent commands in this lab should be run from within the `learn-terraform-variables` directory.
 
-#### 1. Prerequisites
+#### 3. Prerequisites
 
 - Terraform CLI (version 1.1.0+) installed locally
 - An HCP Terraform account
 
-#### 2. Start the Login Flow
+#### 4. Start the Login Flow
 
 Run the following command in your terminal to begin the authentication process:
 
@@ -49,13 +49,13 @@ terraform login
 
 You will be prompted to confirm that you want to authenticate. Type `yes` and press Enter.
 
-#### 3. Generate an API Token
+#### 5. Generate an API Token
 
 A browser window will open to the HCP Terraform login screen. Enter the HCP terraform credentials you have been provided, enter a token name (or use the default), then click **Create API token** to generate your authentication token.
 
 If your browser does not open automatically, copy and paste the provided URL from your terminal into your browser.
 
-#### 4. Add the Token to the CLI
+#### 6. Add the Token to the CLI
 
 Copy the generated token and paste it into your terminal when prompted:
 
@@ -70,7 +70,7 @@ Terraform will store the token in plain text in the following file for use by su
 C:\Users\<username>\AppData\Roaming\terraform.d\credentials.tfrc.json
 ```
 
-#### 5. Verify Authentication
+#### 7. Verify Authentication
 
 After entering your token, you should see a message similar to:
 

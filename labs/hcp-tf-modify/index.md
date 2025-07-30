@@ -41,7 +41,7 @@ terraform apply -var="instance_type=t2.small"
 
 #### 3. Run and Approve Infrastructure Changes
 
-- Run `terraform apply` (with or without per-run variables) to trigger a new run in HCP Terraform.
+- Run `terraform apply -var="instance_type=t2.small"` to trigger a new run in HCP Terraform.
 - Review the plan output in your terminal and/or follow the run URL to the HCP Terraform UI for more details.
 - The plan step summarizes proposed changes. Approve the run in the UI or terminal to apply the changes.
 - After approval, Terraform will update your infrastructure and the workspace state.
@@ -124,9 +124,9 @@ git push
 #### 3. Enable VCS Integration in HCP Terraform
 
 - In the HCP Terraform UI, go to your workspace's **Settings** and select **Version Control**.
-- Click **Connect to version control**, select **Version Control Workflow** and choose your VCS provider (e.g., GitHub App)
+- Click **Connect to version control**, select **Version Control Workflow** and choose your VCS provider (e.g., GitHub.com)
 - Authorize HCP Terraform to access your repository and select the repository you created.
-- Confirm the connection and enable automatic speculative plans, which preview infrastructure changes for every pull request.
+- Confirm the connection and enable automatic speculative plans (checkbox below Pull Requests), which preview infrastructure changes for every pull request.
 
 ---
 
@@ -150,7 +150,7 @@ To test your HCP Terraform integration, make a simple, valid change to your conf
    git commit -m "Change environment tag from dev to development"
    git push
    ```
-6. This push will automatically trigger a Terraform run in your HCP Terraform workspace. You can monitor the run and its results in the HCP T
+6. This push will automatically trigger a Terraform run in your HCP Terraform workspace. You can monitor the run and its results in the HCP Terraform UI.
 
 ---
 

@@ -165,19 +165,9 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    When you make the policy stricter, the mock data in pass.hcl no longer meets the requirement (so it fails), while fail.hcl now matches the expected failure (so it passes). This demonstrates how changing policy logic affects which test cases pass or fail.
 3. Restore the original logic and confirm the test passes again.
 
-
 ---
 
-### Expected Results
-
-- You can generate and use mock data from real Terraform runs.
-- You can run Sentinel policy tests locally using the CLI and mock data.
-- You understand how to simulate both passing and failing scenarios before enforcing policies in HCP Terraform.
-
----
----
-
-### 8. Add and Test a Policy for a Specific Security Group Resource
+### 6. Add and Test a Policy for a Specific Security Group Resource
 
 In this section, you'll create and test a Sentinel policy that checks that the specific security group resource `module.app_security_group.module.sg.aws_security_group.this_name_prefix[0]` has a description containing the word "web-servers".
 
@@ -197,11 +187,44 @@ In this section, you'll create and test a Sentinel policy that checks that the s
    ```
    - This policy only checks the description of the specific resource.
 
-3. **Run your tests:**
+3. **Create test files:**
+   - Create a directory: `test/require-specific-sg-description/`
+   - Create `pass.hcl` with the following content:
+     ```hcl
+     mock "tfplan/v2" {
+       module {
+         source = "../../testdata/mock-tfplan-v2.sentinel"
+       }
+     }
+     test {
+       rules = {
+         main = true
+       }
+     }
+     ```
+
+4. **Run your tests:**
    - From your repo root, run:
      ```sh
      sentinel test
      ```
-   - You should see a passing result if your mock data for that resource matches the policy logic.
+   - You should see a passing result for `pass.hcl` if your mock data for that resource matches the policy logic.
 
---- 
+5. **Make the test fail by modifying the mock:**
+   - Open `testdata/mock-tfplan-v2.sentinel` and find the resource with the address `module.app_security_group.module.sg.aws_security_group.this_name_prefix[0]`. Do this by searching for "resource_changes" within the mock file. It should be the first instance of this resource beneath the "resource_changes" heading.
+   - Change its `description` value so it does **not** contain the string `web-servers`. For example:
+     ```python
+     "description": "Security group for application servers with HTTP ports open within VPC",
+     ```
+   - Save the file and rerun:
+     ```sh
+     sentinel test
+     ```
+   - Now, the test should fail, demonstrating that the policy correctly detects when the description does not match the requirement.
+
+### Expected Results
+
+- You can generate and use mock data from real Terraform runs.
+- You can run Sentinel policy tests locally using the CLI and mock data.
+- You understand how to simulate both passing and failing scenarios before enforcing policies in HCP Terraform.
+---

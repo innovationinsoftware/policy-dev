@@ -123,7 +123,7 @@ Example:
 ```hcl
 terraform {
   cloud {
-    organization = "your-organization"
+    organization = "policy-as-code-training"
     workspaces {
       name = "policy-dev-{your-initials}"
     }

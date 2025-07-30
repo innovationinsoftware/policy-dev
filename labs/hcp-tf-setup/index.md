@@ -109,13 +109,14 @@ You have now learned how to securely authenticate your Terraform CLI with HCP Te
 
 Workspaces in HCP Terraform are used to organize and manage collections of infrastructure resources. Each workspace contains its own state, variables, and configuration, allowing you to separate environments, projects, or components for better collaboration and control. Creating a workspace using the CLI-driven workflow ensures your local configuration is linked to a remote workspace for centralized state management and team access.
 
+Create a workspace using the format "policy-dev-{your-initials}"
+
 ---
 
 #### 1. Update Your Configuration with a Cloud Block
 
 Edit your `main.tf` file to include a `cloud` block specifying your HCP Terraform organization and the desired workspace name. This tells Terraform where to create and manage your workspace.
 
-Create a workspace using the format "policy-dev-{your-initials}"
 
 Example:
 

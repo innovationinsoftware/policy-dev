@@ -69,7 +69,7 @@ cd policy-library-CIS-Policy-Set-for-AWS-Terraform
 
 #### 3. Test Policy Enforcement
 - Trigger a Terraform run in your workspace.
-- There should be **36 policy checks in total**, including **4 advisories**.
+- There should be **36 policy checks in total**, including **3 advisories**.
 - Review the run output:
   - Examine which policies passed and which advisories were issued.
   - Advisories are informational and do not block the run, but highlight recommended best practices.

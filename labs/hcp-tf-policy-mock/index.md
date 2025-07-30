@@ -165,10 +165,6 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    When you make the policy stricter, the mock data in pass.hcl no longer meets the requirement (so it fails), while fail.hcl now matches the expected failure (so it passes). This demonstrates how changing policy logic affects which test cases pass or fail.
 3. Restore the original logic and confirm the test passes again.
 
-#### 6. Create Edge Case Mocks
-
-- Edit the mock files in `testdata/` to simulate unusual or edge-case scenarios (e.g., missing attributes, unexpected values).
-- Add new test cases in the `test/allowed-terraform-version/` directory to cover these scenarios, using the same structure as above.
 
 ---
 
@@ -287,5 +283,44 @@ In this section, you'll create and test a new Sentinel policy that enforces all 
      ```
    - You should see results for both `pass.hcl` and `fail.hcl` for the new policy.
 
-6. **Explanation:**
-   - This demonstrates how to add and test a new, basic Sentinel policy locally using custom mock data and test cases. 
+---
+
+### 8. Add and Test a New Basic Policy: Require S3 SSL
+
+In this section, you'll create and test a new Sentinel policy that enforces all S3 bucket policies must require requests to use SSL.
+
+1. **Create a new policy file:**
+   - In your policy repo, create `require-s3-ssl.sentinel`.
+
+2. **Write the policy logic:**
+   ```sentinel
+   import "tfplan/v2" as tfplan
+
+   # Pass if every aws_s3_bucket_policy contains a statement that denies non-SSL requests
+   main = rule {
+     all tfplan.resource_changes as _, rc {
+       rc.type != "aws_s3_bucket_policy" or (
+         rc.change.after.policy is defined and
+         rc.change.after.policy contains "\"aws:SecureTransport\": false"
+       )
+     }
+   }
+   ```
+   - This policy passes if every S3 bucket policy denies requests where `"aws:SecureTransport": false`.
+
+3. **Create mock data:**
+   - Copy your existing `mock-tfplan-v2.sentinel` to `mock-tfplan-s3-ssl.sentinel`.
+   - Edit the mock so that in one version, all S3 bucket policies deny non-SSL requests (for pass), and in another, at least one does not (for fail).
+
+4. **Write test cases:**
+   - Create a directory: `test/require-s3-ssl/`
+   - Create `pass.hcl` and `fail.hcl` similar to your other tests, referencing the new mock files and setting `main = true` or `main = false` as appropriate.
+
+5. **Run your tests:**
+   - From your repo root, run:
+     ```sh
+     sentinel test
+     ```
+   - You should see results for both `pass.hcl` and `fail.hcl` for the new policy.
+
+--- 

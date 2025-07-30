@@ -1,4 +1,4 @@
-# Lab 14: Enforcing Standard Security Policies for AWS with Sentinel and CIS Policy Set
+# Enforcing Standard Security Policies for AWS with Sentinel and CIS Policy Set
 
 ---
 

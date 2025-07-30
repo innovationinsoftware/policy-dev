@@ -182,8 +182,8 @@ Your workspace is now configured with the necessary AWS credentials, which will 
 
 #### 1. Configure Workspace-Specific Variables
 
-HCP Terraform allows you to define input variables directly in the workspace UI, making it easy to customize your infrastructure without editing code. To add or modify variables:
-- Navigate to the **Variables** page for your workspace in the HCP Terraform UI.
+HCP Terraform allows you to define input variables directly in the workspace UI, making it easy to customize your infrastructure without editing code.
+- Ensure you are still on the workspace variables settings page, if not, navigate to it.
 - In the **Workspace variables** section, click **+ Add variable**.
 - Select the **Terraform variable** radio button.
 - Set the key to `instance_type` and the value to `t2.micro`, then click **Add variable**.

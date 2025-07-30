@@ -1,4 +1,4 @@
-# Lab 11: Authenticating to HCP Terraform from the CLI
+# Authenticating to HCP Terraform from the CLI
 ## Logging in and Secure CLI Authentication
 
 ---
@@ -109,7 +109,7 @@ Workspaces in HCP Terraform are used to organize and manage collections of infra
 
 Edit your `main.tf` file to include a `cloud` block specifying your HCP Terraform organization and the desired workspace name. This tells Terraform where to create and manage your workspace.
 
-Create a workspace using the format 'policy-dev<your-initials>'
+Create a workspace using the format policy-dev<your-initials>
 
 Example:
 

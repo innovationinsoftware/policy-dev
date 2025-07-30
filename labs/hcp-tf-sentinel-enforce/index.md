@@ -1,4 +1,4 @@
-# Lab 13: Enforcing Sentinel Policies in HCP Terraform
+# Enforcing Sentinel Policies in HCP Terraform
 
 ---
 
@@ -60,7 +60,7 @@ main = rule {
 - Click **Connect a new policy set**.
 - Select **Version Control provider**
 - On the settings page:
-  - Name your policy '<workspace-name>-policy'
+  - Name your policy <workspace-name>-policy
   - Select **Sentinel** as the policy framework.
   - Under **Scope of Policies**, select the workspaces you want this policy set to apply to (i.e. your workspace).
   - Untick the **Overrides** ' This policy set can be overridden in the event of mandatory failures.' checkbox.

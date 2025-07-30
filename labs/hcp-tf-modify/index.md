@@ -1,4 +1,4 @@
-# Lab 12: Modifying Infrastructure in HCP Terraform
+# Modifying Infrastructure in HCP Terraform
 
 ---
 

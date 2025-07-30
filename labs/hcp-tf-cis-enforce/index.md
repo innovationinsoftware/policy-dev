@@ -59,12 +59,12 @@ cd policy-library-CIS-Policy-Set-for-AWS-Terraform
 - Click **Connect a new policy set**.
 - Select **Version Control provider**
 - On the settings page:
-  - Name your policy 'cis-benchmarks-policy'
+  - Name your policy 'cis-benchmarks-policy-{your-initials}'
   - Select **Sentinel** as the policy framework.
   - Under **Scope of Policies**, select the workspaces you want this policy set to apply to (i.e. your workspace).
   - Untick the **Overrides** 'This policy set can be overridden in the event of mandatory failures.' checkbox.
   - Click **Next**
-- Then select **github app** and select your forked 'learn-terraform-enforce-policies' repository.
+- Then select **github app** and select your forked 'policy-library-CIS-Policy-Set-for-AWS-Terraform' repository.
 - Click **Next** and finally select **Connect Policy Set**
 
 #### 3. Test Policy Enforcement

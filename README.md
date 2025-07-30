@@ -32,3 +32,11 @@ Lab 10: [Terraform Even More Variables](labs/tf-even-more-variables/index.md)
 
 Lab 11: [Terraform Migrate to Remote State](labs/tf-remote-state/index.md)
 
+### Day 3
+Lab 12: [HCP Terraform Setup](labs/hcp-tf-setup/)   
+
+Lab 13: [HCP Terraform Modify Infrastructure](labs/hcp-tf-modify/)   
+
+Lab 14: [Enforce Sentinel Policies](labs/hcp-tf-sentinel-enforce/)   
+
+Lab 15: [Enforce CIS Policies](labs/hcp-tf-cis-enforce/)   

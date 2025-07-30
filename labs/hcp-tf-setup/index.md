@@ -45,7 +45,7 @@ You will be prompted to confirm that you want to authenticate. Type `yes` and pr
 
 #### 3. Generate an API Token
 
-A browser window will open to the HCP Terraform login screen. Enter a token name (or use the default), then click **Create API token** to generate your authentication token.
+A browser window will open to the HCP Terraform login screen. Enter the HCP terraform credentials you have been provided, enter a token name (or use the default), then click **Create API token** to generate your authentication token.
 
 If your browser does not open automatically, copy and paste the provided URL from your terminal into your browser.
 
@@ -109,6 +109,8 @@ Workspaces in HCP Terraform are used to organize and manage collections of infra
 
 Edit your `main.tf` file to include a `cloud` block specifying your HCP Terraform organization and the desired workspace name. This tells Terraform where to create and manage your workspace.
 
+Create a workspace using the format 'policy-dev<your-initials>'
+
 Example:
 
 ```hcl
@@ -145,7 +147,7 @@ Terraform will initialize the working directory, download required provider plug
 
 To allow Terraform to authenticate with AWS, you need to add your AWS credentials as environment variables at the workspace level in HCP Terraform:
 
-- Navigate to your workspace in the HCP Terraform UI.
+- Navigate to your workspace in the HCP Terraform UI. First select the 'innovationinsoftware' organization, click workspaces in the left hand menu, and finally select your workspace.
 - Go to the **Variables** page.
 - In the **Workspace variables** section, click **+ Add variable**.
 - Select the **Environment variable** radio button.
@@ -250,18 +252,3 @@ This centralized visibility makes it easy to monitor, audit, and share informati
 - You viewed run details, managed resources, and accessed outputs in the workspace UI.
 
 Your workspace is now fully configured and managing infrastructure with HCP Terraform.
-
-#### 4. Make an Explicit Change and Push to Trigger a Plan
-
-To test the integration and trigger a Terraform run in HCP Terraform, make a simple change to your configuration. For example, edit the `variables.tf` file and change the default value of a variable, or update a tag in your `main.tf` file.
-
-1. Open a file such as `variables.tf` or `main.tf` in your code editor.
-2. Make a small, valid change (e.g., update a variable description or a tag value).
-3. Save the file.
-4. Commit and push your change to the main branch of your fork:
-   ```sh
-   git add .
-   git commit -m "Test: update variable description to trigger plan"
-   git push origin main
-   ```
-5. This push will automatically trigger a Terraform run in your HCP Terraform workspace. You can monitor the run and its results in the HCP Terraform UI.

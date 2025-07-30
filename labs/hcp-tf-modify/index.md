@@ -90,9 +90,9 @@ Example:
 terraform {
 /*
   cloud {
-    organization = "organization-name"
+    organization = "policy-as-code-training"
     workspaces {
-      name = "learn-terraform"
+      name = "policy-dev-{your-initials}"
     }
   }
 */

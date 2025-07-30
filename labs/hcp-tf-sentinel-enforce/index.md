@@ -106,13 +106,13 @@ To see the policy enforcement in action, edit the Sentinel policy to require a T
 
 **Before proceeding to step 6:**
 
-- After each run that demonstrates a policy check (advisory, soft-mandatory, or hard-mandatory), be sure to **discard the run** after observing the policy check result. Do not proceed with 'apply'—this ensures you do not make unintended changes to your infrastructure while testing policy enforcement behaviors.
+- After each run that demonstrates a policy check (advisory or hard-mandatory), be sure to **discard the run** after observing the policy check result. Do not proceed with 'apply'—this ensures you do not make unintended changes to your infrastructure while testing policy enforcement behaviors.
 
 ---
 
 #### 6. Demonstrate Each Sentinel Enforcement Level
 
-Sentinel supports three enforcement levels for policies: `advisory`, `soft-mandatory`, and `hard-mandatory`. Each level affects how policy failures impact Terraform runs. Let's demonstrate each one:
+Sentinel supports  enforcement levels for policies: `advisory`, `soft-mandatory`, and `hard-mandatory`. Each level affects how policy failures impact Terraform runs. Let's demonstrate this.
 
 ##### a. Advisory
 
@@ -153,7 +153,7 @@ Sentinel supports three enforcement levels for policies: `advisory`, `soft-manda
 1. In the HCP Terraform UI, go to your organization's **Policy Sets** settings.
 2. Edit your policy set and enable the **Overrides** option: 'This policy set can be overridden in the event of mandatory failures.'
 3. Trigger another run in your workspace (plan and apply).
-4. **Expected outcome:** The policy check will fail, but now you will see an option to override the failure and proceed with the run. This demonstrates how the policy set override setting affects both soft-mandatory and hard-mandatory enforcement levels.
+4. **Expected outcome:** The policy check will fail, but now you will see an option to override the failure and proceed with the run. This demonstrates how the policy set override setting affects all mandatory enforcement levels.
 
 ---
 

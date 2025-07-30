@@ -17,7 +17,13 @@ HCP Terraform runs Terraform operations and stores state remotely, providing a s
 
 ### Hands-On Tasks
 
-#### 0. Fork and Clone the Example Terraform Configuration
+#### 1. Create a GitHub Account (if you don't have one)
+
+1. Go to [https://github.com/join](https://github.com/join) in your web browser.
+2. Fill out the registration form to create a free GitHub account. Follow the prompts to verify your email and complete the setup.
+3. Once your account is created and verified, sign in to GitHub.
+
+#### 2. Fork and Clone the Example Terraform Configuration
 
 1. Go to [https://github.com/jruels/learn-terraform-variables](https://github.com/jruels/learn-terraform-variables) in your web browser.
 2. Click the **Fork** button in the top right corner and fork the repository to your own GitHub account.

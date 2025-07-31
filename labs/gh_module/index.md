@@ -23,9 +23,58 @@ Generate Personal Access Token to authenticate from Ansible to GitHub.
   5. Name token
   6. Select "repo" and "delete_repo" scopes
 7. At the bottom of page, click "Generate token"
-  Make sure you save your token because it will not be shown again.
+    Make sure you save your token because it will not be shown again.
 
 
+
+## Set up a remote SSH session in Visual Studio Code.   
+
+### Pull GitHub repository changes.
+
+In VS Code, go to the source control icon in the left-hand menu, click the ellipses next to the `policy-dev` repository, and click **pull**. This will confirm that you have the latest key.
+
+
+
+### Create the SSH configuration file.
+
+On the left sidebar, click the icon that looks like a computer with a connection icon.
+
+In the Remote Explorer, hover your mouse cursor over **SSH**, click on the gear icon (⚙️) in the top right corner, and select the top option: `C:\Users\tekstudent\.ssh\config` This will open the SSH configuration file in a new editor tab.
+
+
+
+### Add the SSH configuration for the lab server.
+
+Add the following lines to the SSH configuration file, replacing `<IP of Tower server from the spreadsheet>` with the actual IP address of the Tower server and `<Path to the cloned lab directory/keys/lab.pem>` with the correct path to the `lab.pem` file.
+
+**PROTIP**: Right-click the `lab.pem` in the Visual Studio Code Explorer and click `Copy Path`. Paste it below as the value for `IdentifyFile`
+
+```plaintext
+Host tower
+  HostName <IP of Tower server from the spreadsheet>
+  IdentityFile <Path to the cloned lab directory/keys/lab.pem>
+  User ansible
+```
+
+### Save the SSH configuration file.
+
+Save the changes to the SSH configuration file and close it.
+
+### Connect to the lab servers.
+
+1. In the Remote Explorer, you should now see the entry for the Tower server under "SSH Targets."
+2. Click on the entry to connect to the Tower server.
+3. Visual Studio Code will open a new window connected to the Tower server.
+4. You can now open a terminal in this new window and run commands on the Tower server.
+5. On the left in File Explorer, click **Open folder** and choose `/home/ansible`
+
+
+
+### Create a working directory
+
+In Visual Studio Code, or the terminal, create a new directory named `lab-module-[your initials]`
+
+Complete the following steps in the new lab directory.
 
 ## Secure the Token with Ansible Vault
 
@@ -67,7 +116,7 @@ ansible-vault view vault.yml
 
 Writing an Ansible module is not difficult. Modules can be written in any language, but for this lab we will use Python. 
 
-We'll create a quick little module that can create or delete a repository on github.
+We'll create a quick little module that can create or delete a repository on GitHub.
 
 Let's start with a basic scaffolding to see how a custom module works. 
 
@@ -369,7 +418,7 @@ Here is a sample of what that might look like:
   tasks:
     - name: Create a GitHub Repo
       github_repo:
-        github_auth_key: {% raw %} "{{github_token}}" {% endraw %}
+        github_auth_key: "{{github_token}}"
         username: "YOUR GITHUB USERNAME HERE"
         name: "Hello-World"
         description: "First repo created with custom Ansible module"
@@ -394,7 +443,7 @@ Update the playbook with the following task to delete the repository. Remember t
 ```yml
     - name: Delete GitHub Repo
       github_repo:
-        github_auth_key: {% raw %} "{{github_token}}" {% endraw %}
+        github_auth_key: "{{github_token}}"
         username: "YOUR GITHUB USERNAME HERE"
         name: "Hello-World"
         state: absent

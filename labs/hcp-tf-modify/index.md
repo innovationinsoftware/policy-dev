@@ -150,7 +150,8 @@ To test your HCP Terraform integration, make a simple, valid change to your conf
    git commit -m "Change environment tag from dev to development"
    git push
    ```
-6. This push will automatically trigger a Terraform run in your HCP Terraform workspace. You can monitor the run and its results in the HCP Terraform UI.
+6. This push will automatically trigger a Terraform plan in your HCP Terraform workspace. You can monitor the run and its results in the HCP Terraform UI.
+7. Once you've thoroughly evaluated the proposed changes, apply your changes via the HCP terraform UI.
 
 ---
 

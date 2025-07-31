@@ -41,3 +41,11 @@ Lab 13: [HCP Terraform Modify Infrastructure](labs/hcp-tf-modify/index.md)
 Lab 14: [Enforce Sentinel Policies](labs/hcp-tf-sentinel-enforce/index.md)   
 
 Lab 15: [Enforce CIS Policies](labs/hcp-tf-cis-enforce/index.md)   
+
+### Day 4
+Lab 16: [AAP inventory and credentials](labs/aap-inventory-creds-ad-hoc/)  
+
+Lab 17: [AAP projects and jobs](labs/aap-projects-templates-jobs/)  
+
+Lab 18: [Write an Ansible module](labs/gh_module/)   
+

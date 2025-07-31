@@ -152,8 +152,9 @@ Sentinel supports  enforcement levels for policies: `advisory`, `soft-mandatory`
 
 1. In the HCP Terraform UI, go to your organization's **Policy Sets** settings.
 2. Edit your policy set and enable the **Overrides** option: 'This policy set can be overridden in the event of mandatory failures.'
-3. Trigger another run in your workspace (plan and apply).
-4. **Expected outcome:** The policy check will fail, but now you will see an option to override the failure and proceed with the run. This demonstrates how the policy set override setting affects all mandatory enforcement levels.
+3. Change the 'instance_count' var to '5' to trigger a terraform change.
+4. Trigger another run in your workspace (plan and apply).
+5. **Expected outcome:** The policy check will fail, but now you will see an option to override the failure and proceed with the run. This demonstrates how the policy set override setting affects all mandatory enforcement levels.
 
 ---
 

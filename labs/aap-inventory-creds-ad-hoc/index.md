@@ -31,7 +31,6 @@ Inside the Windows VM complete the following steps.
 7. Click the copy button to copy the `https url` for the repo to use in the next step.
 
 
-
 #### Open the newly created repository in VS Code
 
 1. Launch a new VS Code Window.

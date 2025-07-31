@@ -43,9 +43,9 @@ Lab 14: [Enforce Sentinel Policies](labs/hcp-tf-sentinel-enforce/index.md)
 Lab 15: [Enforce CIS Policies](labs/hcp-tf-cis-enforce/index.md)   
 
 ### Day 4
-Lab 16: [AAP inventory and credentials](labs/aap-inventory-creds-ad-hoc/)  
+Lab 16: [AAP inventory and credentials](labs/aap-inventory-creds-ad-hoc/index.md)  
 
-Lab 17: [AAP projects and jobs](labs/aap-projects-templates-jobs/)  
+Lab 17: [AAP projects and jobs](labs/aap-projects-templates-jobs/index.md)  
 
-Lab 18: [Write an Ansible module](labs/gh_module/)   
+Lab 18: [Write an Ansible module](labs/gh_module/index.md)   
 

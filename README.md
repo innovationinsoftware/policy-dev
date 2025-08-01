@@ -43,9 +43,17 @@ Lab 14: [Enforce Sentinel Policies](labs/hcp-tf-sentinel-enforce/index.md)
 Lab 15: [Enforce CIS Policies](labs/hcp-tf-cis-enforce/index.md)   
 
 ### Day 4
-Lab 16: [AAP inventory and credentials](labs/aap-inventory-creds-ad-hoc/index.md)  
+Lab 16: [AAP Inventory and Credentials](labs/aap-inventory-creds-ad-hoc/index.md)  
 
-Lab 17: [AAP projects and jobs](labs/aap-projects-templates-jobs/index.md)  
+Lab 17: [AAP Projects and Jobs](labs/aap-projects-templates-jobs/index.md)  
 
 Lab 18: [Write an Ansible module](labs/gh_module/index.md)   
 
+### Day 5
+Lab 19: [Sentinel Policy Testing](labs/sentinel-policy-testing/index.md)  
+
+Lab 20: [Sentinel Policy Mocking](labs/hcp-tf-policy-mock/index.md)  
+
+Lab 21: [Sentinel Complex Policy Logic](labs/sentinel-complex-logic/index.md)  
+
+Lab 22: [Sentinel Automated Testing](labs/sentinel-automated-testing/index.md)  

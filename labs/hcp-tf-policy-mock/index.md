@@ -29,7 +29,7 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
 3. Click the **Download Sentinel mocks** button.
    - This will download a tarball containing files like `mock-tfplan-v2.sentinel`, `mock-tfconfig-v2.sentinel`, `mock-tfstate-v2.sentinel`, and `mock-tfrun.sentinel`.
    - **Note:** If the button is not visible, ensure you have the correct permissions and the run completed successfully. See [official docs](https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement/test-sentinel) for troubleshooting.
-4. Extract the tarball into a `testdata/` directory in the `learn-terraform-enforce-policies` directory using:
+4. Create the folder `testdata` in the root of the repository, and extract the tarball into a `testdata/` directory in the `learn-terraform-enforce-policies` directory using:
 
    ```sh
    tar -zxvf <tarball-file> -C learn-terraform-enforce-policies/testdata/

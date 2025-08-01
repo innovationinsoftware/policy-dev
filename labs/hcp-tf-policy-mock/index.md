@@ -31,9 +31,11 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    - **Note:** If the button is not visible, ensure you have the correct permissions and the run completed successfully. See [official docs](https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement/test-sentinel) for troubleshooting.
 4. Extract the tarball into a `testdata/` directory in the `learn-terraform-enforce-policies` directory using:
 
+   ```sh
    tar -zxvf <tarball-file> -C learn-terraform-enforce-policies/testdata/
+   ```
 
-6. Create a test/allowed-terraform-version directory, with a pass.hcl and fail.hcl underneath it. The structure should look like this:
+6. Create a `test/allowed-terraform-version` directory, with a `pass.hcl` and `fail.hcl` underneath it. The structure should look like this:
    ```
    learn-terraform-enforce-policies/
    ├── allowed-terraform-version.sentinel

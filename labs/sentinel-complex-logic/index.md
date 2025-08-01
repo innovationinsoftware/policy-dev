@@ -129,7 +129,7 @@ main = rule { evens == [2, 8] }
 m = { "a": "foo", "b": "bar" }
 matched_foo = filter m as _, v { v is "foo" }
 
-main = rule { length(matched_foo) == 1 && matched_foo["a"] == "foo" }
+main = rule { length(matched_foo) == 1 and matched_foo["a"] == "foo" }
 ```
 - Run: `sentinel apply filter-map.sentinel`
 - This will PASS because only the key/value pair with value "foo" is returned.
@@ -155,7 +155,7 @@ m = { "a": "foo", "b": "bar" }
 r = map m as k, v { v }
 
 # This rule will FAIL because r contains "foo" and "bar", but we check for "baz"
-main = rule { length(r) == 2 && "baz" in r }
+main = rule { length(r) == 2 and "baz" in r }
 ```
 - Run: `sentinel apply map-map.sentinel`
 - This will FAIL because "baz" is not in the list of values.
@@ -163,5 +163,12 @@ main = rule { length(r) == 2 && "baz" in r }
 **Explanation:**
 - Each example demonstrates a different aspect of collection operations in Sentinel.
 - All are minimal, focused, and runnable in the open-source CLI.
-
 --- 
+
+---
+
+**Modifying Collection Operations:**
+- You can experiment with the examples above by changing the values in the collections.
+- For instance, adjust the elements in a list or the values in a map to see how the policy logic responds.
+- Try making changes that cause the tests to pass or fail, so you can observe the effect of different data on the policy evaluation.
+- This hands-on approach will help you better understand how Sentinel processes collections and how your logic behaves with various inputs. 

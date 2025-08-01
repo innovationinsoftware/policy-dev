@@ -78,7 +78,7 @@ We'll create a directory for our policy's tests and add individual test case fil
    Here, the mocked time is 9:42am. Since 9 < 12, the policy will return `true` for `main`. The test expects `main = true`, so this test will PASS.
 
 3. Create a test case file for 1pm (should pass, expect `main = false`):
-   Create `test/time-policy/fail-1pm.hcl`:
+   Create `test/time-policy/pass-1pm.hcl`:
    ```hcl
    mock "time" {
      data = {
@@ -150,7 +150,7 @@ We'll create a directory for our policy's tests and add individual test case fil
 We'll create a test case that is intentionally incorrect (the expected value does not match what the policy will return), to show how Sentinel reports a FAIL.
 
 1. Create a test case file for 9am (should FAIL):
-   Create `test/time-policy/should-fail-9am.hcl`:
+   Create `test/time-policy/fail-9am.hcl`:
    ```hcl
    mock "time" {
      data = {
@@ -169,20 +169,6 @@ We'll create a test case that is intentionally incorrect (the expected value doe
    **Explanation:**
    Here, the mocked time is 9:00am. The policy will return `true` for `main` (since 9 < 12), but the test expects `main = false`. This mismatch will cause Sentinel to report this test as FAIL.
 
-2. Run the tests:
-   ```bash
-   sentinel test
-   ```
-   You should see output like:
-   ```sentinel
-   FAIL - time-policy.sentinel
-     FAIL - test/time-policy/should-fail-9am.hcl
-       expected "main" to be false, got: true
-   ...
-   ```
-   **Explanation:**
-   The test failed because the policy returned `true` for `main`, but the test expected `false`. This is how Sentinel helps you catch logic errors or unexpected behavior.
-
 **Summary:**
 - If the expected value in the test file does not match the policy's output, Sentinel will report a FAIL for that test case.
 - This is useful for verifying that your policy fails when it should, and for catching mistakes in your logic or test setup.
@@ -194,7 +180,7 @@ We'll create a test case that is intentionally incorrect (the expected value doe
 **What we're doing:**
 We'll run all the test cases for our policy using the Sentinel CLI.
 
-1. From the `lab6` directory, run:
+1. From the `policy-testing` directory, run:
    ```bash
    sentinel test
    ```

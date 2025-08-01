@@ -1,4 +1,4 @@
-# HashiCorp Sentinel Lab 6: Policy Testing and Simulation
+# HashiCorp Sentinel Lab: Policy Testing and Simulation
 
 ## Overview
 In this lab, you'll learn how to thoroughly test and simulate Sentinel policies using the officially supported `time` import and mock data, as shown in the [Sentinel documentation](https://developer.hashicorp.com/sentinel/docs/writing/testing). You'll use Sentinel's built-in testing framework to write test cases, simulate different times, organize your tests, and ensure your policies behave as expected in a variety of scenarios. By the end, you'll be able to confidently validate policies, catch issues early, and follow best practices for policy testing—all with fully runnable examples in the open-source CLI.
@@ -10,8 +10,8 @@ In this lab, you'll learn how to thoroughly test and simulate Sentinel policies 
 Create and move into a working directory for this lab:
 
 ```bash
-mkdir lab6
-cd lab6
+mkdir policy-testing
+cd policy-testing
 ```
 All commands and files in this lab should be created and run inside the `lab6` directory.
 

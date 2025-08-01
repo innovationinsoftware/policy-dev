@@ -177,7 +177,7 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
 In this section, you'll create and test a Sentinel policy that checks that the specific security group resource `module.app_security_group.module.sg.aws_security_group.this_name_prefix[0]` has a description containing the word "web-servers".
 
 1. **Create a new policy file:**
-   - In your policy repo, create `require-specific-sg-description.sentinel`.
+   - In the root of your policy repo, create `require-sg-description.sentinel`.
 
 2. **Write the policy logic:**
    ```sentinel
@@ -193,7 +193,7 @@ In this section, you'll create and test a Sentinel policy that checks that the s
    - This policy only checks the description of the specific resource.
 
 3. **Create test files:**
-   - Create a directory: `test/require-specific-sg-description/`
+   - Create a directory: `test/require-sg-description/`
    - Create `pass.hcl` with the following content:
      ```hcl
      mock "tfplan/v2" {

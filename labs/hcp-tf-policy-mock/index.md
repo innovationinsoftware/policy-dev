@@ -30,8 +30,8 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    - This will download a tarball containing files like `mock-tfplan-v2.sentinel`, `mock-tfconfig-v2.sentinel`, `mock-tfstate-v2.sentinel`, and `mock-tfrun.sentinel`.
    - **Note:** If the button is not visible, ensure you have the correct permissions and the run completed successfully. See [official docs](https://developer.hashicorp.com/terraform/cloud-docs/policy-enforcement/test-sentinel) for troubleshooting.
 4. Extract the tarball into a `testdata/` directory in the `learn-terraform-enforce-policies` directory 
-
-5. Create a test/allowed-terraform-version directory, with a pass.hcl and fail.hcl underneath it. The structure should look like this:
+5. 
+6. Create a test/allowed-terraform-version directory, with a pass.hcl and fail.hcl underneath it. The structure should look like this:
    ```
    learn-terraform-enforce-policies/
    ├── allowed-terraform-version.sentinel
@@ -73,22 +73,25 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    }
    ```
 
-#### 3. Update Your Policy to Use v2 Imports
+#### 3. Update Your Policy to Use v2 Imports, and Reset the terraform version.
 
 1. Open the `allowed-terraform-version.sentinel` file in your policy repository.
-2. **Change the import statement to use the v2 import, matching the mock files.** Replace any line like:
+2. **Replace the contents with your 'allowed-terraform-version.sentinel' with the content below:**
    ```sentinel
-   import "tfplan"
-   ```
-   with:
-   ```sentinel
-   import "tfplan/v2" as tfplan
+    import "tfplan/v2" as tfplan
+    import "version"
+
+    # This regular expression checks whether the Terraform version used for the plan is 0.14+, 0.15+, or 1.0+
+
+    main = rule {
+      version.new(tfplan.terraform_version).greater_than("1.1.0")
+    }
    ```
    This ensures your policy uses the correct import for the v2 mock data.
 
 #### 4. Write and Run Policy Tests with Mocks
 
-1. Create or open the file `test/allowed-terraform-version/pass.hcl` and **replace its contents** with the following:
+1. Open the file `test/allowed-terraform-version/pass.hcl` and **add the following content**:
    ```hcl
    mock "tfplan/v2" {
      module {

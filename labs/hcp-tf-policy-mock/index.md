@@ -34,6 +34,7 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    ```sh
    tar -zxvf <tarball-file> -C learn-terraform-enforce-policies/testdata/
    ```
+5. Copy `policy-dev/labs/hcp-tf-policy-mock/sentinel.hcl` into the `learn-terraform-enforce-policies/testdata` folder, replacing the existing `sentinel.hcl` if present.
 
 6. Create a `test/allowed-terraform-version` directory, with a `pass.hcl` and `fail.hcl` underneath it. The structure should look like this:
    ```
@@ -44,7 +45,8 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    │   ├── mock-tfplan-v2.sentinel
    │   ├── mock-tfconfig-v2.sentinel
    │   ├── mock-tfstate-v2.sentinel
-   │   └── mock-tfrun.sentinel
+   │   ├── mock-tfrun.sentinel
+   │   └── sentinel.hcl   # from policy-dev/labs/hcp-tf-policy-mock
    └── test/
        └── allowed-terraform-version/
            ├── pass.hcl
@@ -53,7 +55,7 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
 
 #### 2. Organize Your Policy Test Structure
 
-1. Ensure your `sentinel.hcl` file is configured to reference the mock data for local testing. Add the following content to your `sentinel.hcl` file (replace any existing mock blocks for these sources):
+1. Ensure your `sentinel.hcl` (In the root of the repo *NOT* the one within the testdata folder) file is configured to reference the mock data for local testing. Add the following content to your `sentinel.hcl` file (replace any existing mock blocks for these sources):
    ```hcl
    mock "tfplan/v2" {
      module {

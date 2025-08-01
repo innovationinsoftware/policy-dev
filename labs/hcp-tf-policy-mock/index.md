@@ -172,14 +172,14 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
 
 ---
 
-### 6. Add and Test a Policy for a Specific Security Group Resource
+### 6. Add and Test a Policy for a Security Group Resource
 
 In this section, you'll create and test a Sentinel policy that checks that the specific security group resource `module.app_security_group.module.sg.aws_security_group.this_name_prefix[0]` has a description containing the word "web-servers".
 
 1. **Create a new policy file:**
    - In the root of your policy repo, create `require-sg-description.sentinel`.
 
-2. **Write the policy logic:**
+2. **Add the policy logic to the file:**
    ```sentinel
    import "tfplan/v2" as tfplan
 

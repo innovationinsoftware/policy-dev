@@ -78,14 +78,14 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
 1. Open the `allowed-terraform-version.sentinel` file in your policy repository.
 2. **Replace the contents with your 'allowed-terraform-version.sentinel' with the content below:**
    ```sentinel
-    import "tfplan/v2" as tfplan
-    import "version"
+   import "tfplan/v2" as tfplan
+   import "version"
 
-    # This regular expression checks whether the Terraform version used for the plan is 0.14+, 0.15+, or 1.0+
+   # This regular expression checks whether the Terraform version used for the plan is 0.14+, 0.15+, or 1.0+
 
-    main = rule {
-      version.new(tfplan.terraform_version).greater_than("1.1.0")
-    }
+   main = rule {
+       version.new(tfplan.terraform_version).greater_than("1.1.0")
+   }
    ```
    This ensures your policy uses the correct import for the v2 mock data.
 

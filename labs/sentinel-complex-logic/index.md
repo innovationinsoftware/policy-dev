@@ -1,4 +1,4 @@
-# HashiCorp Sentinel Lab 8: Complex Policy Logic
+# HashiCorp Sentinel Lab: Complex Policy Logic
 
 ## Overview
 In this lab, you'll learn how to write more complex Sentinel policies using conditional statements and iteration. These features allow you to express advanced logic, handle multiple resources, and enforce nuanced rules. By the end, you'll be able to write policies that adapt to different inputs and evaluate collections of data.
@@ -10,16 +10,16 @@ In this lab, you'll learn how to write more complex Sentinel policies using cond
 Create and move into a working directory for this lab:
 
 ```bash
-mkdir lab8
-cd lab8
+mkdir complex-logic
+cd complex-logic
 ```
-All commands and files in this lab should be created and run inside the `lab8` directory.
+All commands and files in this lab should be created and run inside the `complex-logic` directory.
 
 ---
 
-## Part 1: Conditionals in Sentinel (Based on Official Documentation)
+## Part 1: Conditionals in Sentinel 
 
-Sentinel supports `if`, `else if`, and `else` statements in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/conditionals)).
+Sentinel supports `if`, `else if`, and `else` statements in the global scope or in functions, but **not inside rule blocks**.
 
 ### 1. Using `if` to Set a Variable
 
@@ -76,9 +76,9 @@ This example demonstrates how to use a `case` statement in the global scope to s
 
 ---
 
-## Part 2: Loops and Iteration (Based on Official Documentation)
+## Part 2: Loops and Iteration
 
-Sentinel supports `for` loops in the global scope or in functions, but **not inside rule blocks** ([see docs](https://developer.hashicorp.com/sentinel/docs/language/loops)).
+Sentinel supports `for` loops in the global scope or in functions, but **not inside rule blocks**.
 
 ### 1. Summing a List
 
@@ -106,9 +106,9 @@ This example demonstrates how to use a `for` loop to sum the values in a list.
 
 ---
 
-## Part 3: Collection Operations (Based on Official Documentation)
+## Part 3: Collection Operations
 
-Sentinel supports collection operations such as `filter` and `map` for lists and maps ([see docs](https://developer.hashicorp.com/sentinel/docs/language/collection-operations)). Here are several focused examples, each as a separate policy file:
+Sentinel supports collection operations such as `filter` and `map` for lists and maps. Here are several focused examples, each as a separate policy file:
 
 ### a. Filtering a List
 
@@ -161,7 +161,7 @@ main = rule { length(r) == 2 && "baz" in r }
 - This will FAIL because "baz" is not in the list of values.
 
 **Explanation:**
-- Each example demonstrates a different aspect of collection operations in Sentinel, as shown in the [official documentation](https://developer.hashicorp.com/sentinel/docs/language/collection-operations).
+- Each example demonstrates a different aspect of collection operations in Sentinel.
 - All are minimal, focused, and runnable in the open-source CLI.
 
 --- 

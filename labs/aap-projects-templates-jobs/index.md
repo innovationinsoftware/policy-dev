@@ -146,7 +146,7 @@ Go to **Resources → Inventories**, and click **First Inventory-[your initials]
 
 At the top of the screen click **Groups** and then **Add**. Fill in the following: 
 
-* **Name**: web-[your initials]
+* **Name**: web
 
 * **Description**: A group for web servers
 

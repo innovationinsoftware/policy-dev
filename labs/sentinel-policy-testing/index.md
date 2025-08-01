@@ -13,7 +13,7 @@ Create and move into a working directory for this lab:
 mkdir policy-testing
 cd policy-testing
 ```
-All commands and files in this lab should be created and run inside the `lab6` directory.
+All commands and files in this lab should be created and run inside the `policy-testing` directory.
 
 ---
 

@@ -34,7 +34,7 @@ In this lab, you will learn how to use **policy mocking** to safely develop and 
    ```sh
    tar -zxvf <tarball-file> -C learn-terraform-enforce-policies/testdata/
    ```
-5. Copy `policy-dev/labs/hcp-tf-policy-mock/sentinel.hcl` into the `learn-terraform-enforce-policies/testdata` folder, replacing the existing `sentinel.hcl` if present.
+5. Copy `policy-dev/labs/hcp-tf-policy-mock/sentinel.hcl` into the `learn-terraform-enforce-policies/testdata`
 
 6. Create a `test/allowed-terraform-version` directory, with a `pass.hcl` and `fail.hcl` underneath it. The structure should look like this:
    ```

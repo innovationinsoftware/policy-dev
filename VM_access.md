@@ -1,27 +1,28 @@
-| Name                    | Username    | Virtual Machine Password   | Virtual Machine Portal                        |
-|:------------------------|:------------|:---------------------------|:----------------------------------------------|
-| Anup Marwaha            | WSAUTO25-43 | TEKwsAUTO25!               | [Ablaze Portal](https://my.ablazedesktop.com) |
-| John Mascio             | WSAUTO25-44 | TEKwsAUTO25!               |                                               |
-| Kari Hosey              | WSAUTO25-45 | TEKwsAUTO25!               |                                               |
-| Lingam S Lakshmaiah     | WSAUTO25-46 | TEKwsAUTO25!               |                                               |
-| Cesar Castaneda         | WSAUTO25-47 | TEKwsAUTO25!               |                                               |
-| Ash Bhatti              | WSAUTO25-48 | TEKwsAUTO25!               |                                               |
-| Donald Dangelo          | WSAUTO25-49 | TEKwsAUTO25!               |                                               |
-| Vinay Sharma            | WSAUTO25-50 | TEKwsAUTO25!               |                                               |
-| Molla Yitayew           | WSAUTO25-51 | TEKwsAUTO25!               |                                               |
-| Sanjida Nisha           | WSAUTO25-52 | TEKwsAUTO25!               |                                               |
-| Jyothishwar Reddy Sama  | WSAUTO25-53 | TEKwsAUTO25!               |                                               |
-| Dilipkumar Patel        | WSAUTO25-54 | TEKwsAUTO25!               |                                               |
-| Barton Roffee           | WSAUTO25-55 | TEKwsAUTO25!               |                                               |
-| Hardik Patel            | WSAUTO25-56 | TEKwsAUTO25!               |                                               |
-| Kenneth Poon            | WSAUTO25-57 | TEKwsAUTO25!               |                                               |
-| Matthew Oyales          | WSAUTO25-58 | TEKwsAUTO25!               |                                               |
-| Gabriella Miesner       | WSAUTO25-59 | TEKwsAUTO25!               |                                               |
-| Muhammad Nuri           | WSAUTO25-60 | TEKwsAUTO25!               |                                               |
-| Murali Vaddi            | WSAUTO25-61 | TEKwsAUTO25!               |                                               |
-| Venkata Deepthi Gaddam  | WSAUTO25-62 | TEKwsAUTO25!               |                                               |
-| Liao	Yunkuan           | WSAUTO25-63 | TEKwsAUTO25!               |                                               |
-| Rajju Balmi             | WSAUTO25-64 | TEKwsAUTO25!               |                                               |
-| Taryn Hains-Karmilovich | WSAUTO25-65 | TEKwsAUTO25!               |                                               |
-| Nam Tran                | WSAUTO25-66 | TEKwsAUTO25!               |                                               |
-| Anil Dubey              | WSAUTO25-67 | TEKwsAUTO25!               |                                               |
+| Name                                  | Username     | Virtual Machine Password | Virtual Machine Portal                      |
+|:--------------------------------------|:-------------|:-------------------------|:--------------------------------------------|
+| Winston Budala                        | WSAUTO25-31  | TekWsauto25!             | [Ablaze Portal](https://my.ablazedesktop.com) |
+| Sreejitha Karthik                     | WSAUTO25-32  | TekWsauto25!             |                                            |
+| Suresh Vakati                         | WSAUTO25-33  | TekWsauto25!             |                                            |
+| Amy M Li                              | WSAUTO25-34  | TekWsauto25!             |                                            |
+| Raju Lanka                            | WSAUTO25-35  | TekWsauto25!             |                                            |
+| Patrick Schmitt                       | WSAUTO25-36  | TekWsauto25!             |                                            |
+| Naveen Malhotra                       | WSAUTO25-37  | TekWsauto25!             |                                            |
+| Pushpjeet Shrivastava                 | WSAUTO25-38  | TekWsauto25!             |                                            |
+| Bijaya Rijal                          | WSAUTO25-39  | TekWsauto25!             |                                            |
+| Travis Clark                          | WSAUTO25-40  | TekWsauto25!             |                                            |
+| Todd J Eberhardt                      | WSAUTO25-41  | TekWsauto25!             |                                            |
+| Satyanarayana Polisetty               | WSAUTO25-42  | TekWsauto25!             |                                            |
+| Miguel Cheng                          | WSAUTO25-43  | TekWsauto25!             |                                            |
+| Carolina Lion He                      | WSAUTO25-44  | TekWsauto25!             |                                            |
+| Tanuja Naik                           | WSAUTO25-45  | TekWsauto25!             |                                            |
+| Milan Patel                           | WSAUTO25-46  | TekWsauto25!             |                                            |
+| Bharadwaz Pichika                     | WSAUTO25-47  | TekWsauto25!             |                                            |
+| Richard Guerra                        | WSAUTO25-48  | TekWsauto25!             |                                            |
+| Biruk Gessesse                        | WSAUTO25-49  | TekWsauto25!             |                                            |
+| Reed O'neal                           | WSAUTO25-50  | TekWsauto25!             |                                            |
+| Pavankumar Appana                     | WSAUTO25-51  | TekWsauto25!             |                                            |
+| Byers Alan                            | WSAUTO25-52  | TekWsauto25!             |                                            |
+| Anandh Subramani Gnanabaskaran        | WSAUTO25-53  | TekWsauto25!             |                                            |
+| Remington Kirrene                     | WSAUTO25-54  | TekWsauto25!             |                                            |
+| Manikandan Nagarajan                  | WSAUTO25-55  | TekWsauto25!             |                                            |
+| Instructor                            | WSAUTO25-56  | TekWsauto25!             |                                            |

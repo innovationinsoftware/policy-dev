@@ -10,7 +10,7 @@ In this lab, you will learn how to enforce Sentinel policies in HCP Terraform. Y
 
 ### Context
 
-Policy as code allows you to define, version, and enforce rules for your infrastructure in a programmatic way. Sentinel is HashiCorp’s policy-as-code framework, integrated with HCP Terraform, that enables fine-grained, logic-based policy decisions. By enforcing policies in HCP Terraform, you can prevent misconfigurations, enforce compliance, and automate governance across your infrastructure workflows.
+Policy as code allows you to define, version, and enforce rules for your infrastructure programmatically. Sentinel is HashiCorp’s policy-as-code framework, integrated with HCP Terraform, that enables fine-grained, logic-based policy decisions. By implementing policies in HCP Terraform, you can prevent misconfigurations, enforce compliance, and automate governance across your infrastructure workflows.
 
 ---
 
@@ -20,12 +20,25 @@ Policy as code allows you to define, version, and enforce rules for your infrast
 
 - Go to [https://github.com/hashicorp/learn-terraform-enforce-policies](https://github.com/hashicorp/learn-terraform-enforce-policies) in your web browser.
 - Click the **Fork** button in the top right to create a copy of the repository under your own GitHub account.
+- Enter your lab directory: `labs/lab14`
 - Once forked, clone your forked repository to your local machine:
 
-```sh
-git clone https://github.com/<your-username>/learn-terraform-enforce-policies.git
-cd learn-terraform-enforce-policies
-```
+  1. CLI
+
+  ```sh
+  git clone https://github.com/<your-username>/learn-terraform-enforce-policies.git
+  cd learn-terraform-enforce-policies
+  ```
+
+  2. VS Code:
+     1. Open Visual Studio Code
+     2. In Visual Studio Code, click **Clone Repository** and paste your new repository URL: `https://github.com/<your-username>/learn-terraform-enforce-policies.git`
+     3. Hit **Enter**, and in the pop-up window, browse to `C:\Users\tekstudent\Downloads\labs\tf-lab14`
+     4. Click **Select as repository destination**
+     5. When prompted to open the cloned repo, choose **Open**.
+     6. After opening the folder, click the third icon in the left toolbar for source control. Next to **changes**, click the ellipses (three dots) and choose **pull**.
+
+- Once forked, clone your forked repository to your local machine:
 
 This repository contains two files: `sentinel.hcl` (the policy set definition) and `allowed-terraform-version.sentinel` (the policy code).
 
@@ -88,7 +101,7 @@ To see the policy enforcement in action, edit the Sentinel policy to require a T
    ```python
    import "tfplan"
    import "version"
-
+   
    main = rule {
      version.new(tfplan.terraform_version).greater_than("1.5.8")
    }

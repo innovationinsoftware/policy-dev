@@ -7,12 +7,12 @@ In this lab, you'll dive deep into the foundational elements of the Sentinel lan
 
 ## Lab Setup
 
-Create and move into a working directory for this lab:
+### Create the Lab Directory
 
-```bash
-mkdir lab2
-cd lab2
-```
+1. Right-click inside the VS Code **Explorer** pane and select **New Folder**.
+2. Name this folder `lab2`.
+3. Right-click the folder and click "Open in Integrated Terminal."
+
 All commands and files in this lab should be created and run inside the `lab2` directory.
 
 ---
@@ -32,7 +32,7 @@ Let's start by creating the simplest possible policy to see the basic structure.
    ```bash
    sentinel apply minimal.sentinel
    ```
-You should see `PASS`. This shows that the policy's main rule evaluated to true.
+   You should see `PASS`. This shows that the policy's main rule evaluated to true.
 
 **Now try the following:**
 - Edit `minimal.sentinel` and change `true` to `false`, so it reads:

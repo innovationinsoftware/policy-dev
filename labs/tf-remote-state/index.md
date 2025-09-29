@@ -29,7 +29,7 @@ output "s3_bucket" {
   value       = aws_s3_bucket.remote_state.id
 }
 ```
-Using Terraform apply the changes. 
+Using Terraform, apply the changes. 
 
 ## Migrate the state
 Now that we've created an S3 bucket, we need to migrate the state to the remote backend. 

@@ -7,19 +7,24 @@ In this lab, you'll get hands-on experience with the HashiCorp Sentinel CLI and 
 
 ## Lab Setup
 
-Create and move into a working directory for this lab:
+### Create a Working Directory
 
-```bash
-mkdir lab1
-cd lab1
-```
+1. Open **Visual Studio Code**.
+2. Click on **File** > **Open Folder...** and create a new folder in your Documents folder named `labs`.
+
+### Create the Lab Directory
+
+1. Right-click inside the VS Code **Explorer** pane and select **New Folder**.
+2. Name this folder `lab1`.
+3. Right-click the folder and click "Open in Integrated Terminal."
+
 All commands and files in this lab should be created and run inside the `lab1` directory.
 
 ---
 
 ## Part 1: Getting Started with the Sentinel CLI
 
-Before you can use Sentinel to enforce policies, you need to make sure the CLI is installed and accessible. This section will help you confirm your setup and introduce you to the available commands.
+Before you can use Sentinel to enforce policies, ensure the CLI is installed and accessible. This section will help you confirm your setup and introduce you to the available commands.
 
 ### 1. Verify Sentinel Installation
 Let's start by checking that Sentinel is installed and ready to use. Open your terminal and run:
@@ -51,7 +56,7 @@ A Sentinel policy is just a file with a `.sentinel` extension. Let's create the 
    ```bash
    sentinel apply hello.sentinel
    ```
-You should see `PASS` as the result. This means the policy's main rule evaluated to true.
+   You should see `PASS` as the result. This means the policy's main rule evaluated to true.
 
 ### 5. Experiment with Rules
 Rules are the core of Sentinel policies. Let's see what happens when a rule fails:
@@ -60,7 +65,7 @@ Rules are the core of Sentinel policies. Let's see what happens when a rule fail
    ```bash
    sentinel apply hello.sentinel
    ```
-You should now see `FAIL`. This demonstrates how rules control policy outcomes.
+   You should now see `FAIL`. This demonstrates how rules control policy outcomes.
 
 ### 6. Try a Function
 Sentinel supports functions for reusable logic. Let's add a simple function to your policy:
@@ -73,7 +78,7 @@ Sentinel supports functions for reusable logic. Let's add a simple function to y
    ```bash
    sentinel apply hello.sentinel
    ```
-You should see `PASS`. This shows how you can define and use functions in your policies.
+   You should see `PASS`. This shows how you can define and use functions in your policies.
 
 ---
 
@@ -82,7 +87,7 @@ You should see `PASS`. This shows how you can define and use functions in your p
 Sentinel includes built-in imports (libraries) for common operations, such as string manipulation. Let's try one out.
 
 ### 7. Use a Built-in Import
-1. Create a new file called `import-test.sentinel` in the lab1 directory with this content:
+1. Create a new file named `import-test.sentinel` in the `lab1` directory with this content:
    ```hcl
    import "strings"
    main = rule { strings.has_prefix("sentinel", "sen") }
@@ -91,7 +96,7 @@ Sentinel includes built-in imports (libraries) for common operations, such as st
    ```bash
    sentinel apply import-test.sentinel
    ```
-You should see `PASS`. This means the import worked and the rule evaluated as expected.
+   You should see `PASS`. This means the import worked and the rule evaluated as expected.
 
 ---
 

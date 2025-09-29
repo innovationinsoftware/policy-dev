@@ -10,7 +10,7 @@ In this lab, you will learn how to enforce standard security and compliance poli
 
 ### Context
 
-Manually implementing security controls across cloud resources is error-prone and difficult to scale. HashiCorp provides a library of pre-written Sentinel policies based on the CIS AWS Foundations Benchmark, which can be attached to your HCP Terraform workspaces to automatically enforce security, compliance, and operational standards.
+Manually implementing security controls across cloud resources is error-prone and difficult to scale. HashiCorp provides a library of pre-written Sentinel policies based on the CIS AWS Foundations Benchmark, which can be attached to your HCP Terraform workspaces to enforce security, compliance, and operational standards automatically.
 
 ---
 
@@ -79,8 +79,8 @@ cd policy-library-CIS-Policy-Set-for-AWS-Terraform
 
 ### Expected Results
 - Sentinel policies from the CIS Policy Set are evaluated on every Terraform run
-- Non-compliant resources are flagged or blocked according to enforcement level
-- Your AWS infrastructure is automatically checked for compliance
+- Non-compliant resources are flagged or blocked according to the enforcement level
+- Your AWS infrastructure is automatically checked for compliance.
 
 ---
 

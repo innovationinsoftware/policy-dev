@@ -9,6 +9,12 @@ In this lab, you'll explore the heart of Sentinel policies: rules and functions.
 
 Rules are the primary building blocks of Sentinel policies. Each rule evaluates to either true or false, and the `main` rule determines the policy's outcome.
 
+### Create the Lab Directory
+
+1. Right-click inside the VS Code **Explorer** pane and select **New Folder**.
+2. Name this folder `lab3`.
+3. Right-click the folder and click "Open in Integrated Terminal."
+
 ### 1. Define Multiple Rules (Practical Example)
 Let's see how you can define and use more than one rule in a policy, using a more practical scenario.
 
@@ -22,7 +28,7 @@ Let's see how you can define and use more than one rule in a policy, using a mor
    ```bash
    sentinel apply rules.sentinel
    ```
-You should see `PASS`. The `main` rule allows access if the user is an admin or another condition is met.
+   You should see `PASS`. The `main` rule allows access if the user is an admin or another condition is met.
 
 **Now try the following to see both PASS and FAIL outcomes:**
 

@@ -27,12 +27,24 @@ HCP Terraform runs Terraform operations and stores state remotely, providing a s
 
 1. Go to [https://github.com/jruels/learn-terraform-variables](https://github.com/jruels/learn-terraform-variables) in your web browser.
 2. Click the **Fork** button in the top right corner and fork the repository to your own GitHub account.
-3. Once forked, clone your forked repository to your local machine:
+3. Enter your lab directory: `labs/lab12`
+4. Once forked, clone your forked repository to your local machine:
+
+   1. CLI
+
    ```sh
    git clone https://github.com/<your-username>/learn-terraform-variables.git
    cd learn-terraform-variables
    ```
-4. All subsequent commands in this lab should be run from within the `learn-terraform-variables` directory.
+
+   2. VS Code:
+      1. Open Visual Studio Code
+      2. In Visual Studio Code, click **Clone Repository** and paste your new repository URL: `https://github.com/<your-username>/learn-terraform-variables.git`
+      3. Hit **Enter**, and in the pop-up window, browse to `C:\Users\tekstudent\Downloads\labs\tf-lab12`
+      4. Click **Select as repository destination**
+      5. When prompted to open the cloned repo, choose **Open**.
+      6. After opening the folder, click the third icon in the left toolbar for source control. Next to **changes**, click the ellipses (three dots) and choose **pull**.
+5. All subsequent commands in this lab should be run from within the `learn-terraform-variables` directory.
 
 #### 3. Prerequisites
 
@@ -109,7 +121,7 @@ You have now learned how to securely authenticate your Terraform CLI with HCP Te
 
 Workspaces in HCP Terraform are used to organize and manage collections of infrastructure resources. Each workspace contains its own state, variables, and configuration, allowing you to separate environments, projects, or components for better collaboration and control. Creating a workspace using the CLI-driven workflow ensures your local configuration is linked to a remote workspace for centralized state management and team access.
 
-Create a workspace using the format "policy-dev-{your-initials}"
+The configuration below creates the workspace using the format "policy-dev-{your-initials}"
 
 ---
 

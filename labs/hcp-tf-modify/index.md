@@ -50,7 +50,7 @@ terraform apply -var="instance_type=t2.small"
 
 #### 4. Observe the Effect of Changes
 
-- After the apply completes, return to the workspace’s **Overview** page.
+- After the `apply` completes, return to the workspace’s **Overview** page.
 - Review the updated resources and outputs tables to confirm your changes.
 - Use the **Runs** and **States** pages to audit the history and state of your infrastructure.
 
@@ -76,7 +76,7 @@ terraform apply -var="instance_type=t2.small"
 
 #### Overview
 
-The VCS-driven workflow in HCP Terraform enables teams to manage infrastructure as code by connecting Terraform workspaces directly to version control repositories such as GitHub. This workflow makes your repository the single source of truth for infrastructure configuration, allowing changes to be tracked, reviewed, and automatically applied through pull requests and merges. By integrating with VCS, HCP Terraform streamlines collaboration and enforces best practices for infrastructure management.
+The VCS-driven workflow in HCP Terraform enables teams to manage infrastructure as code by directly connecting Terraform workspaces to version control repositories, such as GitHub. This workflow makes your repository the single source of truth for infrastructure configuration, allowing changes to be tracked, reviewed, and automatically applied through pull requests and merges. By integrating with VCS, HCP Terraform streamlines collaboration and enforces best practices for infrastructure management.
 
 ---
 
@@ -124,7 +124,7 @@ git push
 #### 3. Enable VCS Integration in HCP Terraform
 
 - In the HCP Terraform UI, go to your workspace's **Settings** and select **Version Control**.
-- Click **Connect to version control**, select **Version Control Workflow** and choose your VCS provider (e.g., GitHub.com)
+- Click **Connect to version control**, select **Version Control Workflow,** and choose your VCS provider (e.g., GitHub.com)
 - Authorize HCP Terraform to access your repository and select the repository you created.
 - Confirm the connection and enable automatic speculative plans (checkbox below Pull Requests), which preview infrastructure changes for every pull request.
 

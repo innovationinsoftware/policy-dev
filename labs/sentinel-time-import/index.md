@@ -7,12 +7,12 @@ In this lab, you'll learn how to write and test Sentinel policies using the offi
 
 ## Lab Setup
 
-Create and move into a working directory for this lab:
+### Create the Lab Directory
 
-```bash
-mkdir lab5
-cd lab5
-```
+1. Right-click inside the VS Code **Explorer** pane and select **New Folder**.
+2. Name this folder `lab5`.
+3. Right-click the folder and click "Open in Integrated Terminal."
+
 All commands and files in this lab should be created and run inside the `lab5` directory.
 
 ---
@@ -29,7 +29,7 @@ This example shows how to write a policy that only allows actions before noon. T
 1. Create a file named `time-policy.sentinel`:
    ```hcl
    import "time"
-
+   
    main = rule { time.now.hour < 12 }
    ```
 2. Create or edit a configuration file named `sentinel.hcl`:
@@ -74,7 +74,7 @@ This example demonstrates how to check the current minute value. You might use t
 1. Create a file named `minute-policy.sentinel`:
    ```hcl
    import "time"
-
+   
    main = rule { time.now.minute >= 30 }
    ```
 2. Edit `sentinel.hcl` to set the minute value:
@@ -108,7 +108,7 @@ This example shows how to combine hour and minute checks for more precise contro
 1. Create a file named `combined-policy.sentinel`:
    ```hcl
    import "time"
-
+   
    main = rule { time.now.hour == 10 and time.now.minute == 45 }
    ```
 2. Edit `sentinel.hcl` to:

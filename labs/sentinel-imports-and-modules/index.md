@@ -7,12 +7,12 @@ In this lab, you'll learn how to extend Sentinel's capabilities using imports an
 
 ## Lab Setup
 
-Create and move into a working directory for this lab:
+### Create the Lab Directory
 
-```bash
-mkdir lab4
-cd lab4
-```
+1. Right-click inside the VS Code **Explorer** pane and select **New Folder**.
+2. Name this folder `lab4`.
+3. Right-click the folder and click "Open in Integrated Terminal."
+
 All commands and files in this lab should be created and run inside the `lab4` directory.
 
 ---
@@ -31,7 +31,7 @@ Sentinel provides several built-in imports (libraries) for tasks like string man
    ```bash
    sentinel apply strings-import.sentinel
    ```
-You should see `PASS`. Try changing the suffix to something else and observe the result.
+   You should see `PASS`. Try changing the suffix to something else and observe the result.
 
 **How this works:**
 - `import "strings"` brings in the built-in `strings` library, which provides functions for working with text.
@@ -57,7 +57,7 @@ Sentinel allows you to use imports to access external data and functions, but th
 1. Create a file named `time-import.sentinel`:
    ```hcl
    import "time"
-
+   
    is_weekday = rule { true }
    is_open_hours = rule { true }
    main = rule { is_open_hours and is_weekday }
@@ -97,9 +97,9 @@ You can use modules locally with the open-source Sentinel CLI by configuring the
 2. Create a policy file named `lab4/policy.sentinel`:
    ```hcl
    import "foo"
-
+   
    foo.hello()
-
+   
    main = true
    ```
 

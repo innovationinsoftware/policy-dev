@@ -85,10 +85,10 @@ Comments help document your policies. Sentinel supports single-line comments usi
   /* This is a comment */
   main = rule { true }
   ```
-  Run the policy and observe what happens. Sentinel only supports `#` for comments; other styles will cause errors.
+  Run the policy and observe what happens. 
 
 **Best Practice:**
-Always document the purpose of your policy and any non-obvious logic using `#` comments.
+Always document the purpose of your policy and any non-obvious logic using comments.
 
 ---
 

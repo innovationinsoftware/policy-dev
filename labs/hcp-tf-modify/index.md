@@ -93,6 +93,7 @@ terraform {
     organization = "policy-as-code-training"
     workspaces {
       name = "policy-dev-{your-initials}"
+      project = "policy-as-dev"
     }
   }
 */
